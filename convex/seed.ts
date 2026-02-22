@@ -3,9 +3,15 @@ import { mutation } from "./_generated/server";
 export const seed = mutation({
   args: {},
   handler: async (ctx) => {
-    // Check if already seeded
-    const existing = await ctx.db.query("listings").first();
-    if (existing) return "Already seeded";
+    // Clear existing data first
+    const existingListings = await ctx.db.query("listings").collect();
+    for (const listing of existingListings) {
+      await ctx.db.delete(listing._id);
+    }
+    const existingUsers = await ctx.db.query("users").collect();
+    for (const user of existingUsers) {
+      await ctx.db.delete(user._id);
+    }
 
     // Create demo user
     const userId = await ctx.db.insert("users", {
@@ -52,7 +58,7 @@ export const seed = mutation({
         description: "PlayStation 5 disc edition with 12 games including Spider-Man 2, FF7 Rebirth, and more. Controller included, all cables.",
         story: "He said he needed 'space to figure things out.' Guess what doesn't need space anymore? His gaming setup. Played maybe 20 hours total because he was always 'busy.' Busy doing what, Derek? BUSY DOING WHAT.",
         price: 35000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1622297845775-5ff3fef71d13?w=800&q=80"],
         category: "Electronics",
         area: "Tamuning",
         condition: "Like New",
@@ -71,7 +77,7 @@ export const seed = mutation({
         description: "14k white gold tennis bracelet with 3ct total diamond weight. Comes with original box and certificate of authenticity.",
         story: "Anniversary gift from year two. There was no year three. She said the bracelet was 'too flashy' but had no problem flashing it on Instagram every other day. The irony is not lost on me.",
         price: 80000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1609361608045-5331e9e6fdcf?w=800&q=80"],
         category: "Jewelry & Watches",
         area: "Dededo",
         condition: "Like New",
@@ -89,7 +95,7 @@ export const seed = mutation({
         description: "KitchenAid Artisan mixer in Empire Red with all attachments - pasta maker, meat grinder, ice cream bowl. Used 3 times.",
         story: "Bought this because he said he wanted to 'learn to cook together as a couple.' The only thing he ever made was excuses. And one very sad omelet. Mixer is basically brand new because surprise, he never touched it after week one.",
         price: 25000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1547091267-6b2be403a763?w=800&q=80"],
         category: "Furniture & Home",
         area: "Mangilao",
         condition: "Like New",
@@ -107,7 +113,7 @@ export const seed = mutation({
         description: "Two Fossil watches, his and hers set. Rose gold for her, gunmetal for him. Barely worn.",
         story: "We were going to be that couple with matching everything. Matching watches, matching tattoos (thankfully I chickened out on that one), matching energy. Turns out only the watches matched. His energy matched someone else entirely.",
         price: 15000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1639564879163-a2a85682410e?w=800&q=80"],
         category: "Jewelry & Watches",
         area: "Tamuning",
         condition: "Good",
@@ -125,7 +131,7 @@ export const seed = mutation({
         description: "Channel Islands Fishbeard surfboard. Great condition, a few minor dings from reef. Fins included.",
         story: "She said she loved the ocean. She said she loved sunsets. She said she loved me. One of those was true and it wasn't the last one. Board still rips though. Take it to Ypao and think of me never.",
         price: 20000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1532339142463-fd0a8979791a?w=800&q=80"],
         category: "Stuff They Left Behind",
         area: "Tumon",
         condition: "Good",
@@ -144,7 +150,7 @@ export const seed = mutation({
         description: "Handwritten letters (his to me), plus a poetry book he annotated. Honestly kind of beautiful writing. Just can't look at it anymore.",
         story: "Four years of love letters. Turns out he was writing to two people. I got the originals, she got the copies. Or maybe it was the other way around. Anyway, if you want to see what betrayal looks like in beautiful cursive, here you go.",
         price: 0,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1755617958394-00f88fcdf1a9?w=800&q=80"],
         category: "Books & Media",
         area: "Mangilao",
         condition: "It's Been Through a Lot",
@@ -162,7 +168,7 @@ export const seed = mutation({
         description: "Coach Tabby 26 in Chalk. Pristine condition, dust bag included, receipt available.",
         story: "Birthday present. He remembered my birthday but forgot he had a whole other girlfriend. The bag is cute though. Unlike his behavior.",
         price: 22000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1604176424472-17cd740f74e9?w=800&q=80"],
         category: "Clothes & Accessories",
         area: "Hagatna",
         condition: "New",
@@ -180,7 +186,7 @@ export const seed = mutation({
         description: "2-person tent (REI Half Dome), two sleeping bags, a Yeti cooler, camping chairs, and a propane stove. Everything you need for Talofofo.",
         story: "We were supposed to go camping at Talofofo Falls for our anniversary. She canceled the day before because she 'wasn't feeling well.' Saw her tagged at a beach party in Tumon that same night. Feeling well enough to party but not to camp with me. Cool cool cool.",
         price: 30000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1602174223443-970f65a02f43?w=800&q=80"],
         category: "Stuff They Left Behind",
         area: "Barrigada",
         condition: "Good",
@@ -198,7 +204,7 @@ export const seed = mutation({
         description: "1 carat solitaire on platinum band. Yes, it's real. Yes, it was expensive. No, I don't want to talk about it.",
         story: "I was going to propose at Two Lovers Point because I thought it was romantic. Then I found out the legend is about two lovers who jumped off a cliff and honestly that tracks. Keeping the receipt would have been smarter than keeping the ring for 6 months. But here we are.",
         price: 150000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1561151743-ee18310c2230?w=800&q=80"],
         category: "Jewelry & Watches",
         area: "Sinajana",
         condition: "New",
@@ -217,7 +223,7 @@ export const seed = mutation({
         description: "Two gift cards for Spa Ayurveda, $150 each. Non-expiring.",
         story: "Valentines Day gift. Spoiler: we didn't make it to Valentine's Day. Bring your bestie, your mom, your dog's groomer -- literally anyone except your ex.",
         price: 20000,
-        photos: [],
+        photos: ["https://images.unsplash.com/photo-1579172342894-e6d751ec390c?w=800&q=80"],
         category: "Gifts & Misc",
         area: "Tumon",
         condition: "New",
