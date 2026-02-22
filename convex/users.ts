@@ -1,18 +1,20 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
+
+// Helper to get current user from Clerk identity
+async function getCurrentUser(ctx: any) {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) return null;
+  return await ctx.db
+    .query("users")
+    .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+    .first();
+}
 
 export const getMe = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) return null;
-    // Find user by auth ID
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
-    return user;
+    return await getCurrentUser(ctx);
   },
 });
 
@@ -23,6 +25,32 @@ export const get = query({
   },
 });
 
+export const getOrCreate = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .first();
+
+    if (existing) return existing._id;
+
+    return await ctx.db.insert("users", {
+      tokenIdentifier: identity.tokenIdentifier,
+      name: identity.name ?? "Anonymous",
+      email: identity.email,
+      avatarUrl: identity.pictureUrl,
+      role: "user",
+      isBanned: false,
+      isPremium: false,
+      createdAt: Date.now(),
+    });
+  },
+});
+
 export const createOrUpdate = mutation({
   args: {
     name: v.string(),
@@ -30,12 +58,12 @@ export const createOrUpdate = mutation({
     avatarUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
 
     const existing = await ctx.db
       .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
       .first();
 
     if (existing) {
@@ -48,7 +76,7 @@ export const createOrUpdate = mutation({
     }
 
     return await ctx.db.insert("users", {
-      tokenIdentifier: userId,
+      tokenIdentifier: identity.tokenIdentifier,
       name: args.name,
       email: args.email,
       avatarUrl: args.avatarUrl,
@@ -68,12 +96,12 @@ export const update = mutation({
     avatarUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
 
     const user = await ctx.db
       .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
       .first();
     if (!user) throw new Error("User not found");
 

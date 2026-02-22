@@ -1,6 +1,17 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
+
+// Helper to get current user from Clerk identity
+async function getCurrentUser(ctx: any) {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) throw new Error("Not authenticated");
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+    .first();
+  if (!user) throw new Error("User not found");
+  return user;
+}
 
 export const list = query({
   args: {
@@ -13,9 +24,8 @@ export const list = query({
   handler: async (ctx, args) => {
     const limit = args.limit ?? 50;
 
-    // Search mode
     if (args.search && args.search.trim().length > 0) {
-      let searchQuery = ctx.db
+      const searchQuery = ctx.db
         .query("listings")
         .withSearchIndex("search_title_desc", (q) => {
           let sq = q.search("title", args.search!);
@@ -24,11 +34,9 @@ export const list = query({
           if (args.area) sq = sq.eq("area", args.area);
           return sq;
         });
-      const results = await searchQuery.take(limit);
-      return results;
+      return await searchQuery.take(limit);
     }
 
-    // Browse mode
     let results;
     if (args.category) {
       results = await ctx.db
@@ -54,7 +62,6 @@ export const list = query({
         .take(limit);
     }
 
-    // Sort featured first
     const now = Date.now();
     return results.sort((a, b) => {
       const aFeatured = a.featured && a.featuredUntil && a.featuredUntil > now;
@@ -87,7 +94,6 @@ export const getBySeller = query({
         .order("desc")
         .collect();
     }
-    // All listings for seller
     const active = await ctx.db
       .query("listings")
       .withIndex("by_seller", (q) =>
@@ -118,17 +124,9 @@ export const create = mutation({
     condition: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
-    if (!user) throw new Error("User not found");
+    const user = await getCurrentUser(ctx);
     if (user.isBanned) throw new Error("User is banned");
 
-    // Check free tier limit
     if (!user.isPremium) {
       const activeListings = await ctx.db
         .query("listings")
@@ -176,17 +174,10 @@ export const update = mutation({
     condition: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
-
+    const user = await getCurrentUser(ctx);
     const listing = await ctx.db.get(args.id);
     if (!listing) throw new Error("Listing not found");
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
-    if (!user || user._id !== listing.sellerId) throw new Error("Not authorized");
+    if (user._id !== listing.sellerId) throw new Error("Not authorized");
 
     const updates: Record<string, unknown> = { updatedAt: Date.now() };
     if (args.title !== undefined) updates.title = args.title;
@@ -205,20 +196,12 @@ export const update = mutation({
 export const remove = mutation({
   args: { id: v.id("listings") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
-
+    const user = await getCurrentUser(ctx);
     const listing = await ctx.db.get(args.id);
     if (!listing) throw new Error("Listing not found");
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
-    if (!user || (user._id !== listing.sellerId && user.role !== "admin")) {
+    if (user._id !== listing.sellerId && user.role !== "admin") {
       throw new Error("Not authorized");
     }
-
     await ctx.db.patch(args.id, { status: "removed", updatedAt: Date.now() });
   },
 });
@@ -226,18 +209,10 @@ export const remove = mutation({
 export const markSold = mutation({
   args: { id: v.id("listings") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
-
+    const user = await getCurrentUser(ctx);
     const listing = await ctx.db.get(args.id);
     if (!listing) throw new Error("Listing not found");
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
-    if (!user || user._id !== listing.sellerId) throw new Error("Not authorized");
-
+    if (user._id !== listing.sellerId) throw new Error("Not authorized");
     await ctx.db.patch(args.id, { status: "sold", updatedAt: Date.now() });
   },
 });
@@ -254,8 +229,8 @@ export const incrementView = mutation({
 export const generateUploadUrl = mutation({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
     return await ctx.storage.generateUploadUrl();
   },
 });

@@ -2,19 +2,17 @@
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { ListingCard, ListingCardSkeleton } from "@/components/listings/listing-card";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import {
-  User, MapPin, Settings, LogOut, Package, MessageCircle,
+  User, MapPin, LogOut, Package, MessageCircle,
   ShoppingBag, CheckCircle2, Pencil, Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
   const currentUser = useQuery(api.users.getMe);
-  const { signIn, signOut } = useAuthActions();
 
   if (currentUser === undefined) {
     return (
@@ -28,24 +26,13 @@ export default function DashboardPage() {
   }
 
   if (!currentUser) {
-    return <SignInView signIn={signIn} />;
+    return <SignInView />;
   }
 
-  return <DashboardContent user={currentUser} signOut={signOut} />;
+  return <DashboardContent user={currentUser} />;
 }
 
-function SignInView({ signIn }: { signIn: any }) {
-  const [signingIn, setSigningIn] = useState(false);
-
-  const handleAnonymousSignIn = async () => {
-    setSigningIn(true);
-    try {
-      await signIn("anonymous");
-    } catch {
-      setSigningIn(false);
-    }
-  };
-
+function SignInView() {
   return (
     <div className="max-w-md mx-auto px-4 py-20 text-center">
       <motion.div
@@ -61,15 +48,14 @@ function SignInView({ signIn }: { signIn: any }) {
         </p>
 
         <div className="space-y-3">
-          <button
-            onClick={handleAnonymousSignIn}
-            disabled={signingIn}
-            className="w-full px-6 py-3.5 bg-coral text-white rounded-2xl font-display font-bold shadow-lg shadow-coral/25 hover:bg-coral-dark hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-50"
+          <Link
+            href="/sign-in"
+            className="block w-full px-6 py-3.5 bg-coral text-white rounded-2xl font-display font-bold shadow-lg shadow-coral/25 hover:bg-coral-dark hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-center"
           >
-            {signingIn ? "Signing in..." : "Continue as Guest"}
-          </button>
+            Sign In
+          </Link>
           <p className="text-xs text-muted">
-            Google sign-in coming soon. For now, try it as a guest!
+            Sign in to start selling your ex&apos;s stuff!
           </p>
         </div>
       </motion.div>
@@ -77,7 +63,7 @@ function SignInView({ signIn }: { signIn: any }) {
   );
 }
 
-function DashboardContent({ user, signOut }: { user: any; signOut: any }) {
+function DashboardContent({ user }: { user: any }) {
   const [tab, setTab] = useState<"active" | "sold">("active");
   const activeListings = useQuery(api.listings.getBySeller, {
     sellerId: user._id,
@@ -182,12 +168,12 @@ function DashboardContent({ user, signOut }: { user: any; signOut: any }) {
           <Link href="/messages" className="flex items-center gap-1.5 text-sm text-muted hover:text-coral transition-colors">
             <MessageCircle className="w-4 h-4" /> Messages
           </Link>
-          <button
-            onClick={() => signOut()}
+          <Link
+            href="/sign-in"
             className="flex items-center gap-1.5 text-sm text-muted hover:text-red-500 transition-colors ml-auto"
           >
             <LogOut className="w-4 h-4" /> Sign Out
-          </button>
+          </Link>
         </div>
       </motion.div>
 

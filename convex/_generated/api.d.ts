@@ -8,7 +8,7 @@
  * @module
  */
 
-import type * as auth from "../auth.js";
+import type * as admin from "../admin.js";
 import type * as listings from "../listings.js";
 import type * as messages from "../messages.js";
 import type * as seed from "../seed.js";
@@ -21,7 +21,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  auth: typeof auth;
+  admin: typeof admin;
   listings: typeof listings;
   messages: typeof messages;
   seed: typeof seed;

@@ -7,6 +7,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/brand/logo";
+import { AuthButtons } from "@/components/layout/auth-buttons";
 
 const navItems = [
   { href: "/", icon: Home, label: "Home" },
@@ -64,7 +65,6 @@ export function BottomNav() {
 export function TopNav() {
   const pathname = usePathname();
   const unreadCount = useQuery(api.messages.getUnreadCount) ?? 0;
-  const user = useQuery(api.users.getMe);
 
   return (
     <header className="hidden md:block sticky top-0 z-50 bg-cream/90 backdrop-blur-xl border-b border-charcoal/5">
@@ -116,21 +116,7 @@ export function TopNav() {
             )}
           </Link>
 
-          <Link
-            href="/dashboard"
-            className={cn(
-              "ml-1 p-2 rounded-full transition-colors duration-200",
-              pathname.startsWith("/dashboard")
-                ? "bg-ocean/8 text-ocean"
-                : "text-muted hover:text-charcoal"
-            )}
-          >
-            {user?.avatarUrl ? (
-              <img src={user.avatarUrl} alt="" className="w-6 h-6 rounded-full" />
-            ) : (
-              <User className="w-5 h-5" />
-            )}
-          </Link>
+          <AuthButtons />
         </nav>
       </div>
     </header>

@@ -1,17 +1,25 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
 
-// Helper to get current user
+// Helper to get current user from Clerk identity
 async function getCurrentUser(ctx: any) {
-  const userId = await getAuthUserId(ctx);
-  if (!userId) throw new Error("Not authenticated");
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) throw new Error("Not authenticated");
   const user = await ctx.db
     .query("users")
-    .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", userId))
+    .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", identity.tokenIdentifier))
     .first();
   if (!user) throw new Error("User not found");
   return user;
+}
+
+async function getOptionalUser(ctx: any) {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) return null;
+  return await ctx.db
+    .query("users")
+    .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+    .first();
 }
 
 export const getOrCreateConversation = mutation({
@@ -22,7 +30,6 @@ export const getOrCreateConversation = mutation({
     if (!listing) throw new Error("Listing not found");
     if (listing.sellerId === user._id) throw new Error("Can't message yourself");
 
-    // Check for existing conversation
     const existing = await ctx.db
       .query("conversations")
       .withIndex("by_listing_buyer", (q) =>
@@ -46,12 +53,7 @@ export const getOrCreateConversation = mutation({
 export const listConversations = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) return [];
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
+    const user = await getOptionalUser(ctx);
     if (!user) return [];
 
     const asBuyer = await ctx.db
@@ -70,7 +72,6 @@ export const listConversations = query({
       (a, b) => b.lastMessageAt - a.lastMessageAt
     );
 
-    // Deduplicate
     const seen = new Set<string>();
     return all.filter((c) => {
       if (seen.has(c._id)) return false;
@@ -125,7 +126,6 @@ export const sendMessage = mutation({
       createdAt: now,
     });
 
-    // Update conversation
     const preview =
       args.text.length > 80 ? args.text.substring(0, 80) + "..." : args.text;
     const isBuyer = conversation.buyerId === user._id;
@@ -157,12 +157,7 @@ export const markRead = mutation({
 export const getUnreadCount = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) return 0;
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", userId))
-      .first();
+    const user = await getOptionalUser(ctx);
     if (!user) return 0;
 
     const asBuyer = await ctx.db

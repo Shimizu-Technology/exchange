@@ -1,6 +1,2 @@
-import { Anonymous } from "@convex-dev/auth/providers/Anonymous";
-import { convexAuth } from "@convex-dev/auth/server";
-
-export const { auth, signIn, signOut, store } = convexAuth({
-  providers: [Anonymous],
-});
+// Auth is handled externally by Clerk.
+// This file is kept as a placeholder.
