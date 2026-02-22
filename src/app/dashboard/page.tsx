@@ -13,7 +13,6 @@ import {
 import Link from "next/link";
 
 export default function DashboardPage() {
-  const { signOut } = useClerk();
   const currentUser = useQuery(api.users.getMe);
 
   if (currentUser === undefined) {
@@ -66,6 +65,7 @@ function SignInView() {
 }
 
 function DashboardContent({ user }: { user: any }) {
+  const { signOut } = useClerk();
   const [tab, setTab] = useState<"active" | "sold">("active");
   const activeListings = useQuery(api.listings.getBySeller, {
     sellerId: user._id,

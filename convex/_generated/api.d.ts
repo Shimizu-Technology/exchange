@@ -9,6 +9,7 @@
  */
 
 import type * as admin from "../admin.js";
+import type * as crons from "../crons.js";
 import type * as listings from "../listings.js";
 import type * as messages from "../messages.js";
 import type * as seed from "../seed.js";
@@ -22,6 +23,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
+  crons: typeof crons;
   listings: typeof listings;
   messages: typeof messages;
   seed: typeof seed;
