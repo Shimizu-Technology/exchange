@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { trackEvent } from "@/components/analytics/posthog-provider";
 
 export default function ListingDetailPage() {
   const params = useParams();
@@ -49,12 +50,13 @@ export default function ListingDetailPage() {
       return;
     }
     try {
+      trackEvent("i_want_this_clicked", { listingId, title: listing?.title, price: listing?.price });
       const convId = await getOrCreateConversation({ listingId });
       router.push(`/messages/${convId}`);
     } catch (e: any) {
       alert(e.message);
     }
-  }, [currentUser, getOrCreateConversation, listingId, router]);
+  }, [currentUser, getOrCreateConversation, listingId, listing, router]);
 
   const handleShare = useCallback(async () => {
     const url = window.location.href;
@@ -68,7 +70,8 @@ export default function ListingDetailPage() {
       await navigator.clipboard.writeText(url);
       alert("Link copied!");
     }
-  }, [listing]);
+    trackEvent("share_clicked", { listingId, title: listing?.title });
+  }, [listing, listingId]);
 
   if (listing === undefined) {
     return (

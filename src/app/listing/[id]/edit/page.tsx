@@ -9,9 +9,10 @@ import { CATEGORIES, AREAS, CONDITIONS, formatPrice } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
   ArrowLeft, Save, Trash2, CheckCircle2, Package,
-  MapPin, Tag, DollarSign, FileText, Heart,
+  MapPin, Tag, DollarSign, FileText, Heart, Zap,
 } from "lucide-react";
 import Link from "next/link";
+import { trackEvent } from "@/components/analytics/posthog-provider";
 
 export default function EditListingPage() {
   const params = useParams();
@@ -288,6 +289,65 @@ export default function EditListingPage() {
             </button>
           </div>
         </div>
+
+        {/* Boost Listing */}
+        {!isSold && !listing.featured && (
+          <div className="bg-coral/5 rounded-2xl p-6 border border-coral/10">
+            <div className="flex items-center gap-2 mb-3">
+              <Zap className="w-5 h-5 text-coral" />
+              <h3 className="font-display font-bold text-charcoal">Boost Your Listing</h3>
+            </div>
+            <p className="text-sm text-muted mb-4">
+              Get more eyes on your listing. Boost puts it at the top of the feed with a featured badge.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={async () => {
+                  trackEvent("boost_initiated", { listingId, boostType: "24hr", price: 3 });
+                  const res = await fetch("/api/stripe/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ listingId, listingTitle: title, boostType: "24hr", userId: currentUser?._id }),
+                  });
+                  const { url } = await res.json();
+                  if (url) window.location.href = url;
+                }}
+                className="px-4 py-3 bg-white rounded-xl border border-coral/20 text-center hover:border-coral/40 transition-colors"
+              >
+                <span className="block font-display font-bold text-coral text-lg">$3</span>
+                <span className="text-xs text-muted">24 Hours</span>
+              </button>
+              <button
+                onClick={async () => {
+                  trackEvent("boost_initiated", { listingId, boostType: "48hr", price: 5 });
+                  const res = await fetch("/api/stripe/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ listingId, listingTitle: title, boostType: "48hr", userId: currentUser?._id }),
+                  });
+                  const { url } = await res.json();
+                  if (url) window.location.href = url;
+                }}
+                className="px-4 py-3 bg-coral text-white rounded-xl text-center hover:bg-coral-dark transition-colors"
+              >
+                <span className="block font-display font-bold text-lg">$5</span>
+                <span className="text-xs opacity-80">48 Hours</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {listing.featured && (
+          <div className="bg-sage/10 rounded-2xl p-6 border border-sage/20">
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="w-5 h-5 text-sage fill-sage" />
+              <h3 className="font-display font-bold text-charcoal">Currently Boosted</h3>
+            </div>
+            <p className="text-sm text-muted">
+              Your listing is featured until {listing.featuredUntil ? new Date(listing.featuredUntil).toLocaleString() : "soon"}.
+            </p>
+          </div>
+        )}
 
         {/* Action buttons */}
         <div className="flex flex-col gap-3 pt-4">

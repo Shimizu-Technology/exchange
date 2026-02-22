@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, internalMutation } from "./_generated/server";
 
 // Helper to get current user from Clerk identity
 async function getCurrentUser(ctx: any) {
@@ -239,6 +239,39 @@ export const getImageUrl = query({
   args: { storageId: v.string() },
   handler: async (ctx, args) => {
     return await ctx.storage.getUrl(args.storageId as any);
+  },
+});
+
+export const boostListing = mutation({
+  args: {
+    id: v.id("listings"),
+    hours: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const listing = await ctx.db.get(args.id);
+    if (!listing) throw new Error("Listing not found");
+
+    const now = Date.now();
+    const featuredUntil = now + args.hours * 60 * 60 * 1000;
+
+    await ctx.db.patch(args.id, {
+      featured: true,
+      featuredUntil,
+      updatedAt: now,
+    });
+  },
+});
+
+export const expireBoosts = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const listings = await ctx.db.query("listings").collect();
+    for (const listing of listings) {
+      if (listing.featured && listing.featuredUntil && listing.featuredUntil < now) {
+        await ctx.db.patch(listing._id, { featured: false });
+      }
+    }
   },
 });
 

@@ -10,6 +10,7 @@ import {
   Camera, ArrowLeft, ArrowRight, Check, X, ImagePlus,
   MapPin, Tag, Sparkles, DollarSign, Eye, Heart,
 } from "lucide-react";
+import { trackEvent } from "@/components/analytics/posthog-provider";
 
 const STEPS = ["Photos", "Details", "Story", "Price", "Preview"];
 
@@ -65,6 +66,7 @@ export default function SellPage() {
         area,
         condition,
       });
+      trackEvent("listing_created", { listingId, title: title.trim(), category, area, price: isFree ? 0 : Number(price) });
       router.push(`/listing/${listingId}`);
     } catch (e: any) {
       alert(e.message || "Something went wrong");

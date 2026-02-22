@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ConvexProvider } from "@/components/convex-provider";
+import { PostHogProvider } from "@/components/analytics/posthog-provider";
 import { BottomNav, TopNav } from "@/components/layout/nav";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://exchange-guam.netlify.app";
@@ -72,13 +73,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-cream">
-        <ConvexProvider>
-          <TopNav />
-          <main className="pb-20 md:pb-0">
-            {children}
-          </main>
-          <BottomNav />
-        </ConvexProvider>
+        <PostHogProvider>
+          <ConvexProvider>
+            <TopNav />
+            <main className="pb-20 md:pb-0">
+              {children}
+            </main>
+            <BottomNav />
+          </ConvexProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
