@@ -31,6 +31,7 @@ export default function ListingDetailPage() {
 
   const incrementView = useMutation(api.listings.incrementView);
   const getOrCreateConversation = useMutation(api.messages.getOrCreateConversation);
+  const reportListing = useMutation(api.listings.report);
 
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
@@ -294,7 +295,23 @@ export default function ListingDetailPage() {
         </button>
 
         {!isOwner && (
-          <button className="p-3.5 bg-white rounded-2xl border border-charcoal/10 hover:border-red-300 hover:text-red-500 transition-colors">
+          <button
+            onClick={async () => {
+              if (!currentUser) {
+                alert("Sign in to report a listing");
+                return;
+              }
+              const reason = prompt("Why are you reporting this listing?\n\n• Spam or scam\n• Inappropriate content\n• Prohibited item\n• Other");
+              if (!reason) return;
+              try {
+                await reportListing({ id: listingId, reason });
+                alert("Report submitted. Thank you!");
+              } catch (e: any) {
+                alert(e.message?.includes("already reported") ? "You already reported this listing" : "Failed to submit report");
+              }
+            }}
+            className="p-3.5 bg-white rounded-2xl border border-charcoal/10 hover:border-red-300 hover:text-red-500 transition-colors"
+          >
             <Flag className="w-5 h-5" />
           </button>
         )}

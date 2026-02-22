@@ -241,3 +241,38 @@ export const getImageUrl = query({
     return await ctx.storage.getUrl(args.storageId as any);
   },
 });
+
+export const report = mutation({
+  args: {
+    id: v.id("listings"),
+    reason: v.string(),
+    details: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .first();
+    if (!user) throw new Error("User not found");
+
+    // Check if user already reported this listing
+    const existing = await ctx.db
+      .query("reports")
+      .withIndex("by_listing", (q) => q.eq("listingId", args.id))
+      .collect();
+    if (existing.some((r) => r.reporterId === user._id)) {
+      throw new Error("You already reported this listing");
+    }
+
+    await ctx.db.insert("reports", {
+      listingId: args.id,
+      reporterId: user._id,
+      reason: args.reason,
+      details: args.details,
+      status: "pending",
+      createdAt: Date.now(),
+    });
+  },
+});

@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, useMutation } from "convex/react";
+import { useClerk } from "@clerk/nextjs";
 import { api } from "../../../convex/_generated/api";
 import { ListingCard, ListingCardSkeleton } from "@/components/listings/listing-card";
 import { motion } from "framer-motion";
@@ -12,6 +13,7 @@ import {
 import Link from "next/link";
 
 export default function DashboardPage() {
+  const { signOut } = useClerk();
   const currentUser = useQuery(api.users.getMe);
 
   if (currentUser === undefined) {
@@ -168,12 +170,12 @@ function DashboardContent({ user }: { user: any }) {
           <Link href="/messages" className="flex items-center gap-1.5 text-sm text-muted hover:text-coral transition-colors">
             <MessageCircle className="w-4 h-4" /> Messages
           </Link>
-          <Link
-            href="/sign-in"
+          <button
+            onClick={() => signOut({ redirectUrl: "/" })}
             className="flex items-center gap-1.5 text-sm text-muted hover:text-red-500 transition-colors ml-auto"
           >
             <LogOut className="w-4 h-4" /> Sign Out
-          </Link>
+          </button>
         </div>
       </motion.div>
 
