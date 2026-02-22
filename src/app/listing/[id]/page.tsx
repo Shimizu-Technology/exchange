@@ -73,11 +73,11 @@ export default function ListingDetailPage() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 w-24 bg-near-black/5 rounded-xl" />
-          <div className="aspect-[4/3] bg-near-black/5 rounded-2xl" />
-          <div className="h-8 w-3/4 bg-near-black/5 rounded-xl" />
-          <div className="h-6 w-1/4 bg-near-black/5 rounded-xl" />
-          <div className="h-32 bg-near-black/5 rounded-2xl" />
+          <div className="h-8 w-24 bg-charcoal/5 rounded-xl" />
+          <div className="aspect-[4/3] bg-charcoal/5 rounded-2xl" />
+          <div className="h-8 w-3/4 bg-charcoal/5 rounded-xl" />
+          <div className="h-6 w-1/4 bg-charcoal/5 rounded-xl" />
+          <div className="h-32 bg-charcoal/5 rounded-2xl" />
         </div>
       </div>
     );
@@ -89,12 +89,12 @@ export default function ListingDetailPage() {
         <h2 className="font-display text-2xl font-bold mb-2">
           This one got away.
         </h2>
-        <p className="text-warm-gray mb-6">
+        <p className="text-muted mb-6">
           This listing has moved on to better things. Just like you should.
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-hot-pink text-white rounded-xl font-semibold hover:bg-hot-pink-dark transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-coral text-white rounded-xl font-semibold hover:bg-coral-dark transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Back to browsing
         </Link>
@@ -116,13 +116,13 @@ export default function ListingDetailPage() {
       {/* Back button */}
       <button
         onClick={() => router.back()}
-        className="flex items-center gap-1.5 text-warm-gray hover:text-near-black mb-4 transition-colors text-sm"
+        className="flex items-center gap-1.5 text-muted hover:text-charcoal mb-4 transition-colors text-sm"
       >
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
 
       {/* Photo carousel */}
-      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-near-black/5 mb-6">
+      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-charcoal/5 mb-6">
         {listing.photos.length > 0 ? (
           <>
             <img
@@ -159,13 +159,13 @@ export default function ListingDetailPage() {
             )}
           </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-hot-pink/10 to-electric-yellow/10 flex items-center justify-center">
-            <Heart className="w-20 h-20 text-hot-pink/20" />
+          <div className="w-full h-full bg-gradient-to-br from-coral/10 to-sage/10 flex items-center justify-center">
+            <Heart className="w-20 h-20 text-coral/20" />
           </div>
         )}
 
         {isSold && (
-          <div className="absolute inset-0 bg-deep-charcoal/60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-ocean/60 flex items-center justify-center">
             <span className="font-display text-3xl font-bold text-white -rotate-12">
               Gone. Just like they are.
             </span>
@@ -173,7 +173,7 @@ export default function ListingDetailPage() {
         )}
 
         {isFeatured && !isSold && (
-          <div className="absolute top-4 left-4 px-3 py-1.5 bg-electric-yellow text-near-black text-sm font-bold rounded-full flex items-center gap-1 shadow-lg">
+          <div className="absolute top-4 left-4 px-3 py-1.5 bg-sage text-charcoal text-sm font-bold rounded-full flex items-center gap-1 shadow-lg">
             <Zap className="w-4 h-4" /> Boosted
           </div>
         )}
@@ -185,7 +185,7 @@ export default function ListingDetailPage() {
           <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
             {listing.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-warm-gray">
+          <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-muted">
             <span className="flex items-center gap-1">
               <Tag className="w-3.5 h-3.5" /> {listing.category}
             </span>
@@ -200,7 +200,7 @@ export default function ListingDetailPage() {
             </span>
           </div>
         </div>
-        <span className="font-display text-2xl md:text-3xl font-bold text-hot-pink whitespace-nowrap">
+        <span className="font-display text-2xl md:text-3xl font-bold text-coral whitespace-nowrap">
           {formatPrice(listing.price)}
         </span>
       </div>
@@ -208,11 +208,11 @@ export default function ListingDetailPage() {
       {/* Condition badge */}
       <div className="mb-6">
         <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-          listing.condition === "New" ? "bg-teal/10 text-teal" :
-          listing.condition === "Like New" ? "bg-teal/10 text-teal" :
-          listing.condition === "Good" ? "bg-electric-yellow/20 text-near-black" :
-          listing.condition === "Fair" ? "bg-warm-gray/10 text-warm-gray" :
-          "bg-hot-pink/10 text-hot-pink"
+          listing.condition === "New" ? "bg-sage/10 text-sage" :
+          listing.condition === "Like New" ? "bg-sage/10 text-sage" :
+          listing.condition === "Good" ? "bg-sage/20 text-charcoal" :
+          listing.condition === "Fair" ? "bg-muted/10 text-muted" :
+          "bg-coral/10 text-coral"
         }`}>
           {listing.condition}
         </span>
@@ -224,12 +224,12 @@ export default function ListingDetailPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.4 }}
-          className="relative mb-8 p-6 bg-gradient-to-br from-hot-pink/5 via-warm-white to-electric-yellow/5 rounded-2xl border border-hot-pink/10"
+          className="relative mb-8 p-6 bg-gradient-to-br from-coral/5 via-cream to-sage/5 rounded-2xl border border-coral/10"
         >
-          <div className="absolute -top-3 left-6 px-3 py-1 bg-hot-pink text-white text-xs font-bold rounded-full">
+          <div className="absolute -top-3 left-6 px-3 py-1 bg-coral text-white text-xs font-bold rounded-full">
             The Story
           </div>
-          <p className="text-near-black leading-relaxed text-base md:text-lg mt-2 italic">
+          <p className="text-charcoal leading-relaxed text-base md:text-lg mt-2 italic">
             &ldquo;{listing.story}&rdquo;
           </p>
         </motion.div>
@@ -238,10 +238,10 @@ export default function ListingDetailPage() {
       {/* Description */}
       {listing.description && (
         <div className="mb-8">
-          <h3 className="font-display font-bold text-sm text-warm-gray uppercase tracking-wider mb-2">
+          <h3 className="font-display font-bold text-sm text-muted uppercase tracking-wider mb-2">
             Details
           </h3>
-          <p className="text-near-black leading-relaxed">{listing.description}</p>
+          <p className="text-charcoal leading-relaxed">{listing.description}</p>
         </div>
       )}
 
@@ -249,18 +249,18 @@ export default function ListingDetailPage() {
       {seller && (
         <Link
           href={`/profile/${seller._id}`}
-          className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-near-black/5 hover:border-hot-pink/20 transition-colors mb-8"
+          className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-charcoal/5 hover:border-coral/20 transition-colors mb-8"
         >
-          <div className="w-12 h-12 rounded-full bg-hot-pink/10 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-coral/10 flex items-center justify-center">
             {seller.avatarUrl ? (
               <img src={seller.avatarUrl} alt="" className="w-12 h-12 rounded-full" />
             ) : (
-              <User className="w-6 h-6 text-hot-pink" />
+              <User className="w-6 h-6 text-coral" />
             )}
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-display font-bold truncate">{seller.name}</p>
-            <p className="text-xs text-warm-gray">
+            <p className="text-xs text-muted">
               {sellerListingCount ?? 0} listing{(sellerListingCount ?? 0) !== 1 ? "s" : ""} &middot; Member since {new Date(seller.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
             </p>
           </div>
@@ -272,7 +272,7 @@ export default function ListingDetailPage() {
         {isOwner ? (
           <Link
             href={`/dashboard`}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-near-black text-white rounded-2xl font-display font-bold hover:bg-deep-charcoal transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-charcoal text-white rounded-2xl font-display font-bold hover:bg-ocean transition-colors"
           >
             <Pencil className="w-5 h-5" /> Edit Listing
           </Link>
@@ -280,7 +280,7 @@ export default function ListingDetailPage() {
           <button
             onClick={handleIWantThis}
             disabled={isSold}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-hot-pink text-white rounded-2xl font-display font-bold text-lg shadow-lg shadow-hot-pink/25 hover:bg-hot-pink-dark hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-coral text-white rounded-2xl font-display font-bold text-lg shadow-lg shadow-coral/25 hover:bg-coral-dark hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             <MessageCircle className="w-5 h-5" /> I Want This
           </button>
@@ -288,13 +288,13 @@ export default function ListingDetailPage() {
 
         <button
           onClick={handleShare}
-          className="p-3.5 bg-white rounded-2xl border border-near-black/10 hover:border-hot-pink/20 hover:text-hot-pink transition-colors"
+          className="p-3.5 bg-white rounded-2xl border border-charcoal/10 hover:border-coral/20 hover:text-coral transition-colors"
         >
           <Share2 className="w-5 h-5" />
         </button>
 
         {!isOwner && (
-          <button className="p-3.5 bg-white rounded-2xl border border-near-black/10 hover:border-red-300 hover:text-red-500 transition-colors">
+          <button className="p-3.5 bg-white rounded-2xl border border-charcoal/10 hover:border-red-300 hover:text-red-500 transition-colors">
             <Flag className="w-5 h-5" />
           </button>
         )}

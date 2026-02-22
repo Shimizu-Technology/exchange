@@ -14,9 +14,9 @@ export default function MessagesPage() {
   if (!currentUser) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <MessageCircle className="w-16 h-16 text-hot-pink/20 mx-auto mb-4" />
+        <MessageCircle className="w-16 h-16 text-coral/20 mx-auto mb-4" />
         <h2 className="font-display text-xl font-bold mb-2">Sign in to see your messages</h2>
-        <p className="text-warm-gray text-sm">Start a conversation by tapping &ldquo;I Want This&rdquo; on any listing.</p>
+        <p className="text-muted text-sm">Start a conversation by tapping &ldquo;I Want This&rdquo; on any listing.</p>
       </div>
     );
   }
@@ -27,10 +27,10 @@ export default function MessagesPage() {
         <h1 className="font-display text-2xl font-bold mb-6">Messages</h1>
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="flex items-center gap-3 p-4 animate-pulse">
-            <div className="w-12 h-12 rounded-full bg-near-black/5" />
+            <div className="w-12 h-12 rounded-full bg-charcoal/5" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-1/3 bg-near-black/5 rounded" />
-              <div className="h-3 w-2/3 bg-near-black/5 rounded" />
+              <div className="h-4 w-1/3 bg-charcoal/5 rounded" />
+              <div className="h-3 w-2/3 bg-charcoal/5 rounded" />
             </div>
           </div>
         ))}
@@ -44,9 +44,9 @@ export default function MessagesPage() {
 
       {conversations.length === 0 ? (
         <div className="text-center py-16">
-          <MessageCircle className="w-16 h-16 text-hot-pink/20 mx-auto mb-4" />
+          <MessageCircle className="w-16 h-16 text-coral/20 mx-auto mb-4" />
           <h3 className="font-display text-lg font-bold mb-2">No messages yet</h3>
-          <p className="text-warm-gray text-sm">
+          <p className="text-muted text-sm">
             Start a conversation by tapping &ldquo;I Want This&rdquo; on any listing.
           </p>
         </div>
@@ -82,14 +82,14 @@ function ConversationItem({ conversation, currentUserId, index }: {
         href={`/messages/${conversation._id}`}
         className="flex items-center gap-3 p-4 rounded-2xl hover:bg-white transition-colors group"
       >
-        <div className="relative w-12 h-12 rounded-full bg-hot-pink/10 flex items-center justify-center flex-shrink-0">
+        <div className="relative w-12 h-12 rounded-full bg-coral/10 flex items-center justify-center flex-shrink-0">
           {otherUser?.avatarUrl ? (
             <img src={otherUser.avatarUrl} alt="" className="w-12 h-12 rounded-full" />
           ) : (
-            <User className="w-6 h-6 text-hot-pink" />
+            <User className="w-6 h-6 text-coral" />
           )}
           {unread > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-hot-pink text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-coral text-white text-[10px] font-bold rounded-full flex items-center justify-center">
               {unread > 9 ? "9+" : unread}
             </span>
           )}
@@ -100,15 +100,15 @@ function ConversationItem({ conversation, currentUserId, index }: {
             <p className={`font-medium text-sm truncate ${unread > 0 ? "font-bold" : ""}`}>
               {otherUser?.name ?? "Loading..."}
             </p>
-            <span className="text-xs text-warm-gray ml-2 whitespace-nowrap">
+            <span className="text-xs text-muted ml-2 whitespace-nowrap">
               {formatTimeAgo(conversation.lastMessageAt)}
             </span>
           </div>
           {listing && (
-            <p className="text-xs text-hot-pink truncate">{listing.title}</p>
+            <p className="text-xs text-coral truncate">{listing.title}</p>
           )}
           {conversation.lastMessagePreview && (
-            <p className={`text-sm truncate ${unread > 0 ? "text-near-black" : "text-warm-gray"}`}>
+            <p className={`text-sm truncate ${unread > 0 ? "text-charcoal" : "text-muted"}`}>
               {conversation.lastMessagePreview}
             </p>
           )}

@@ -25,7 +25,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#e91e8c",
+  themeColor: "#e07a5f",
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-warm-white">
+      <body className="min-h-screen bg-cream">
         <ConvexProvider>
           <TopNav />
           <main className="pb-20 md:pb-0">
