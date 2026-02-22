@@ -1,6 +1,8 @@
-// Clerk JWT auth configuration.
-// Set CLERK_JWT_ISSUER_DOMAIN in Convex dashboard environment variables
-// to enable Clerk authentication.
 export default {
-  providers: [],
+  providers: [
+    {
+      domain: "https://smart-catfish-20.clerk.accounts.dev",
+      applicationID: "convex",
+    },
+  ],
 };
