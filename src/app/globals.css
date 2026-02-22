@@ -1,31 +1,32 @@
-@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@100,200,300,400,500,600,700,800,900&f[]=satoshi@300,400,500,600,700,900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600,700&f[]=zodiak@400,500,600,700&display=swap');
 
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-hot-pink: #e91e8c;
-  --color-hot-pink-light: #f472b6;
-  --color-hot-pink-dark: #be185d;
-  --color-electric-yellow: #ffe14d;
-  --color-electric-yellow-light: #fef08a;
-  --color-teal: #14b8a6;
-  --color-teal-light: #5eead4;
-  --color-teal-dark: #0d9488;
-  --color-warm-white: #faf8f5;
-  --color-deep-charcoal: #1a1a2e;
-  --color-near-black: #1c1917;
-  --color-warm-gray: #78716c;
+  --color-coral: #e07a5f;
+  --color-coral-light: #f0a18c;
+  --color-coral-dark: #c25a3e;
+  --color-sand: #f4f1de;
+  --color-sand-dark: #e8e4c9;
+  --color-ocean: #3d405b;
+  --color-ocean-light: #5a5d7a;
+  --color-sage: #81b29a;
+  --color-sage-light: #a8d4bc;
+  --color-sage-dark: #5f9178;
+  --color-cream: #fefcf3;
+  --color-charcoal: #2d2d2d;
+  --color-muted: #9c9c9c;
 
-  --font-display: 'Cabinet Grotesk', sans-serif;
-  --font-body: 'Satoshi', sans-serif;
+  --font-display: 'Zodiak', serif;
+  --font-body: 'General Sans', sans-serif;
 }
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-warm-white);
-  color: var(--color-near-black);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -34,7 +35,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -42,11 +42,10 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-warm-gray);
+  background: var(--color-muted);
   border-radius: 3px;
 }
 
-/* Hide scrollbar on horizontal scroll containers */
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -55,7 +54,6 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
-/* Shimmer animation for skeletons */
 @keyframes shimmer {
   100% {
     transform: translateX(100%);

@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/listing/[id]/page": "app/listing/[id]/page.js",
+  "/messages/[id]/page": "app/messages/[id]/page.js",
+  "/messages/page": "app/messages/page.js",
+  "/page": "app/page.js",
+  "/profile/[id]/page": "app/profile/[id]/page.js",
+  "/search/page": "app/search/page.js",
+  "/sell/page": "app/sell/page.js"
+}

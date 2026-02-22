@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/dashboard/page": "/dashboard",
+  "/favicon.ico/route": "/favicon.ico",
+  "/listing/[id]/page": "/listing/[id]",
+  "/messages/[id]/page": "/messages/[id]",
+  "/messages/page": "/messages",
+  "/page": "/",
+  "/profile/[id]/page": "/profile/[id]",
+  "/search/page": "/search",
+  "/sell/page": "/sell"
+}

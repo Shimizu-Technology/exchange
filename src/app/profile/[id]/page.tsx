@@ -19,10 +19,10 @@ export default function ProfilePage() {
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-full bg-near-black/5" />
+            <div className="w-20 h-20 rounded-full bg-charcoal/5" />
             <div className="space-y-2">
-              <div className="h-6 w-40 bg-near-black/5 rounded" />
-              <div className="h-4 w-24 bg-near-black/5 rounded" />
+              <div className="h-6 w-40 bg-charcoal/5 rounded" />
+              <div className="h-4 w-24 bg-charcoal/5 rounded" />
             </div>
           </div>
         </div>
@@ -37,17 +37,17 @@ export default function ProfilePage() {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-4 mb-8"
       >
-        <div className="w-20 h-20 rounded-full bg-hot-pink/10 flex items-center justify-center">
+        <div className="w-20 h-20 rounded-full bg-coral/10 flex items-center justify-center">
           {user.avatarUrl ? (
             <img src={user.avatarUrl} alt="" className="w-20 h-20 rounded-full" />
           ) : (
-            <User className="w-10 h-10 text-hot-pink" />
+            <User className="w-10 h-10 text-coral" />
           )}
         </div>
         <div>
           <h1 className="font-display text-2xl font-bold">{user.name}</h1>
-          {user.bio && <p className="text-warm-gray text-sm mt-1">{user.bio}</p>}
-          <div className="flex items-center gap-3 mt-2 text-xs text-warm-gray">
+          {user.bio && <p className="text-muted text-sm mt-1">{user.bio}</p>}
+          <div className="flex items-center gap-3 mt-2 text-xs text-muted">
             {user.area && (
               <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {user.area}</span>
             )}
@@ -67,7 +67,7 @@ export default function ProfilePage() {
           {Array.from({ length: 4 }).map((_, i) => <ListingCardSkeleton key={i} />)}
         </div>
       ) : listings.length === 0 ? (
-        <p className="text-warm-gray text-sm py-8 text-center">No listings yet</p>
+        <p className="text-muted text-sm py-8 text-center">No listings yet</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {listings.map((listing, i) => (

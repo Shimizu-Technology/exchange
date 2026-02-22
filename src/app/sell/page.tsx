@@ -81,13 +81,13 @@ export default function SellPage() {
             <button
               onClick={() => i < step && setStep(i)}
               className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
-                i === step ? "text-hot-pink" : i < step ? "text-teal cursor-pointer" : "text-warm-gray/40"
+                i === step ? "text-coral" : i < step ? "text-sage cursor-pointer" : "text-muted/40"
               }`}
             >
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-300 ${
-                i === step ? "bg-hot-pink text-white scale-110" :
-                i < step ? "bg-teal text-white" :
-                "bg-near-black/5 text-warm-gray/40"
+                i === step ? "bg-coral text-white scale-110" :
+                i < step ? "bg-sage text-white" :
+                "bg-charcoal/5 text-muted/40"
               }`}>
                 {i < step ? <Check className="w-3 h-3" /> : i + 1}
               </div>
@@ -95,7 +95,7 @@ export default function SellPage() {
             </button>
             {i < STEPS.length - 1 && (
               <div className={`flex-1 h-0.5 mx-2 rounded-full transition-colors ${
-                i < step ? "bg-teal" : "bg-near-black/5"
+                i < step ? "bg-sage" : "bg-charcoal/5"
               }`} />
             )}
           </div>
@@ -114,29 +114,29 @@ export default function SellPage() {
           {step === 0 && (
             <div>
               <h2 className="font-display text-2xl font-bold mb-1">Add some photos</h2>
-              <p className="text-warm-gray text-sm mb-6">Show off what you&apos;re selling. Up to 5 photos.</p>
+              <p className="text-muted text-sm mb-6">Show off what you&apos;re selling. Up to 5 photos.</p>
 
               <div className="grid grid-cols-3 gap-3">
                 {photos.map((photo, i) => (
-                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-near-black/5">
+                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-charcoal/5">
                     <img src={photo} alt="" className="w-full h-full object-cover" />
                     <button
                       onClick={() => setPhotos(photos.filter((_, j) => j !== i))}
-                      className="absolute top-2 right-2 w-6 h-6 bg-near-black/60 text-white rounded-full flex items-center justify-center hover:bg-near-black/80"
+                      className="absolute top-2 right-2 w-6 h-6 bg-charcoal/60 text-white rounded-full flex items-center justify-center hover:bg-charcoal/80"
                     >
                       <X className="w-3 h-3" />
                     </button>
                   </div>
                 ))}
                 {photos.length < 5 && (
-                  <button className="aspect-square rounded-xl border-2 border-dashed border-near-black/10 hover:border-hot-pink/30 flex flex-col items-center justify-center gap-1.5 transition-colors group">
-                    <ImagePlus className="w-8 h-8 text-warm-gray/40 group-hover:text-hot-pink/60 transition-colors" />
-                    <span className="text-xs text-warm-gray/40 group-hover:text-hot-pink/60 transition-colors">Add photo</span>
+                  <button className="aspect-square rounded-xl border-2 border-dashed border-charcoal/10 hover:border-coral/30 flex flex-col items-center justify-center gap-1.5 transition-colors group">
+                    <ImagePlus className="w-8 h-8 text-muted/40 group-hover:text-coral/60 transition-colors" />
+                    <span className="text-xs text-muted/40 group-hover:text-coral/60 transition-colors">Add photo</span>
                   </button>
                 )}
               </div>
 
-              <p className="text-warm-gray/60 text-xs mt-4 text-center">
+              <p className="text-muted/60 text-xs mt-4 text-center">
                 Photo upload coming soon — listings will work without photos for now
               </p>
             </div>
@@ -146,7 +146,7 @@ export default function SellPage() {
           {step === 1 && (
             <div>
               <h2 className="font-display text-2xl font-bold mb-1">Item details</h2>
-              <p className="text-warm-gray text-sm mb-6">What are you getting rid of?</p>
+              <p className="text-muted text-sm mb-6">What are you getting rid of?</p>
 
               <div className="space-y-4">
                 <div>
@@ -156,7 +156,7 @@ export default function SellPage() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g., PS5 + 12 Games Bundle"
-                    className="w-full px-4 py-3 bg-white rounded-xl border border-near-black/10 focus:border-hot-pink/40 focus:ring-2 focus:ring-hot-pink/10 focus:outline-none transition-all text-sm"
+                    className="w-full px-4 py-3 bg-white rounded-xl border border-charcoal/10 focus:border-coral/40 focus:ring-2 focus:ring-coral/10 focus:outline-none transition-all text-sm"
                     maxLength={100}
                   />
                 </div>
@@ -168,7 +168,7 @@ export default function SellPage() {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Details about the item — condition, what's included, etc."
                     rows={3}
-                    className="w-full px-4 py-3 bg-white rounded-xl border border-near-black/10 focus:border-hot-pink/40 focus:ring-2 focus:ring-hot-pink/10 focus:outline-none transition-all text-sm resize-none"
+                    className="w-full px-4 py-3 bg-white rounded-xl border border-charcoal/10 focus:border-coral/40 focus:ring-2 focus:ring-coral/10 focus:outline-none transition-all text-sm resize-none"
                     maxLength={1000}
                   />
                 </div>
@@ -184,8 +184,8 @@ export default function SellPage() {
                         onClick={() => setCategory(cat)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                           category === cat
-                            ? "bg-hot-pink text-white shadow-sm"
-                            : "bg-white text-warm-gray border border-near-black/10 hover:border-hot-pink/30"
+                            ? "bg-coral text-white shadow-sm"
+                            : "bg-white text-muted border border-charcoal/10 hover:border-coral/30"
                         }`}
                       >
                         {cat}
@@ -201,7 +201,7 @@ export default function SellPage() {
                   <select
                     value={area}
                     onChange={(e) => setArea(e.target.value)}
-                    className="w-full px-4 py-3 bg-white rounded-xl border border-near-black/10 focus:border-hot-pink/40 focus:ring-2 focus:ring-hot-pink/10 focus:outline-none transition-all text-sm appearance-none"
+                    className="w-full px-4 py-3 bg-white rounded-xl border border-charcoal/10 focus:border-coral/40 focus:ring-2 focus:ring-coral/10 focus:outline-none transition-all text-sm appearance-none"
                   >
                     <option value="">Select your village</option>
                     {AREAS.map((a) => (
@@ -219,8 +219,8 @@ export default function SellPage() {
                         onClick={() => setCondition(cond)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                           condition === cond
-                            ? "bg-teal text-white shadow-sm"
-                            : "bg-white text-warm-gray border border-near-black/10 hover:border-teal/30"
+                            ? "bg-sage text-white shadow-sm"
+                            : "bg-white text-muted border border-charcoal/10 hover:border-sage/30"
                         }`}
                       >
                         {cond}
@@ -236,10 +236,10 @@ export default function SellPage() {
           {step === 2 && (
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-5 h-5 text-hot-pink" />
+                <Sparkles className="w-5 h-5 text-coral" />
                 <h2 className="font-display text-2xl font-bold">The Story</h2>
               </div>
-              <p className="text-warm-gray text-sm mb-6">
+              <p className="text-muted text-sm mb-6">
                 This is what makes ExChange special. {storyPrompts[Math.floor(Math.random() * storyPrompts.length)]}
               </p>
 
@@ -248,12 +248,12 @@ export default function SellPage() {
                 onChange={(e) => setStory(e.target.value)}
                 placeholder="He said he needed 'space to figure things out.' Guess what doesn't need space anymore? His gaming setup..."
                 rows={8}
-                className="w-full px-4 py-3 bg-white rounded-xl border border-near-black/10 focus:border-hot-pink/40 focus:ring-2 focus:ring-hot-pink/10 focus:outline-none transition-all text-sm resize-none leading-relaxed"
+                className="w-full px-4 py-3 bg-white rounded-xl border border-charcoal/10 focus:border-coral/40 focus:ring-2 focus:ring-coral/10 focus:outline-none transition-all text-sm resize-none leading-relaxed"
                 maxLength={2000}
               />
-              <div className="flex items-center justify-between mt-2 text-xs text-warm-gray">
+              <div className="flex items-center justify-between mt-2 text-xs text-muted">
                 <span>Optional, but highly encouraged</span>
-                <span className={story.length > 1800 ? "text-hot-pink" : ""}>{story.length}/2000</span>
+                <span className={story.length > 1800 ? "text-coral" : ""}>{story.length}/2000</span>
               </div>
             </div>
           )}
@@ -262,18 +262,18 @@ export default function SellPage() {
           {step === 3 && (
             <div>
               <h2 className="font-display text-2xl font-bold mb-1">Set your price</h2>
-              <p className="text-warm-gray text-sm mb-6">How much is this closure worth?</p>
+              <p className="text-muted text-sm mb-6">How much is this closure worth?</p>
 
               <div className="space-y-4">
                 <div className="relative">
-                  <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-warm-gray" />
+                  <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
                   <input
                     type="number"
                     value={price}
                     onChange={(e) => { setPrice(e.target.value); setIsFree(false); }}
                     placeholder="0.00"
                     disabled={isFree}
-                    className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-near-black/10 focus:border-hot-pink/40 focus:ring-2 focus:ring-hot-pink/10 focus:outline-none transition-all text-2xl font-display font-bold disabled:opacity-30"
+                    className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-charcoal/10 focus:border-coral/40 focus:ring-2 focus:ring-coral/10 focus:outline-none transition-all text-2xl font-display font-bold disabled:opacity-30"
                     min="0"
                     step="1"
                   />
@@ -283,14 +283,14 @@ export default function SellPage() {
                   onClick={() => { setIsFree(!isFree); if (!isFree) setPrice(""); }}
                   className={`w-full p-4 rounded-2xl border-2 text-left transition-all ${
                     isFree
-                      ? "border-teal bg-teal/5"
-                      : "border-near-black/10 hover:border-teal/30"
+                      ? "border-sage bg-sage/5"
+                      : "border-charcoal/10 hover:border-sage/30"
                   }`}
                 >
-                  <span className={`font-display font-bold ${isFree ? "text-teal" : "text-near-black"}`}>
+                  <span className={`font-display font-bold ${isFree ? "text-sage" : "text-charcoal"}`}>
                     Free — just take it
                   </span>
-                  <p className="text-xs text-warm-gray mt-0.5">Sometimes the best revenge is giving it away</p>
+                  <p className="text-xs text-muted mt-0.5">Sometimes the best revenge is giving it away</p>
                 </button>
               </div>
             </div>
@@ -300,29 +300,29 @@ export default function SellPage() {
           {step === 4 && (
             <div>
               <h2 className="font-display text-2xl font-bold mb-1">Preview</h2>
-              <p className="text-warm-gray text-sm mb-6">Here&apos;s how your listing will look</p>
+              <p className="text-muted text-sm mb-6">Here&apos;s how your listing will look</p>
 
-              <div className="bg-white rounded-2xl border border-near-black/5 overflow-hidden">
-                <div className="aspect-[4/3] bg-gradient-to-br from-hot-pink/10 to-electric-yellow/10 flex items-center justify-center">
+              <div className="bg-white rounded-2xl border border-charcoal/5 overflow-hidden">
+                <div className="aspect-[4/3] bg-gradient-to-br from-coral/10 to-sage/10 flex items-center justify-center">
                   {photos.length > 0 ? (
                     <img src={photos[0]} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <Heart className="w-16 h-16 text-hot-pink/20" />
+                    <Heart className="w-16 h-16 text-coral/20" />
                   )}
                 </div>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h3 className="font-display font-bold text-lg">{title || "Your listing title"}</h3>
-                    <span className="font-display font-bold text-hot-pink text-lg">
+                    <span className="font-display font-bold text-coral text-lg">
                       {isFree ? "Free" : price ? `$${price}` : "$0"}
                     </span>
                   </div>
                   {story && (
-                    <p className="text-warm-gray text-sm italic leading-relaxed mb-3">
+                    <p className="text-muted text-sm italic leading-relaxed mb-3">
                       &ldquo;{story.slice(0, 120)}{story.length > 120 ? "..." : ""}&rdquo;
                     </p>
                   )}
-                  <div className="flex items-center gap-3 text-xs text-warm-gray">
+                  <div className="flex items-center gap-3 text-xs text-muted">
                     {area && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {area}</span>}
                     {category && <span className="flex items-center gap-1"><Tag className="w-3 h-3" /> {category}</span>}
                     {condition && <span>{condition}</span>}
@@ -339,7 +339,7 @@ export default function SellPage() {
         {step > 0 && (
           <button
             onClick={() => setStep(step - 1)}
-            className="px-5 py-3 rounded-xl border border-near-black/10 text-warm-gray font-medium hover:text-near-black hover:border-near-black/20 transition-colors"
+            className="px-5 py-3 rounded-xl border border-charcoal/10 text-muted font-medium hover:text-charcoal hover:border-charcoal/20 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -349,7 +349,7 @@ export default function SellPage() {
           <button
             onClick={() => setStep(step + 1)}
             disabled={!canProceed()}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-near-black text-white rounded-xl font-display font-bold hover:bg-deep-charcoal disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-charcoal text-white rounded-xl font-display font-bold hover:bg-ocean disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             Next <ArrowRight className="w-4 h-4" />
           </button>
@@ -357,7 +357,7 @@ export default function SellPage() {
           <button
             onClick={handleSubmit}
             disabled={submitting || !canProceed()}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-hot-pink text-white rounded-xl font-display font-bold text-lg shadow-lg shadow-hot-pink/25 hover:bg-hot-pink-dark hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-coral text-white rounded-xl font-display font-bold text-lg shadow-lg shadow-coral/25 hover:bg-coral-dark hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {submitting ? (
               <span className="animate-pulse">Publishing...</span>
