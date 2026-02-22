@@ -25,6 +25,12 @@ export const get = query({
   },
 });
 
+// Emails that automatically get admin role on signup
+const ADMIN_EMAILS = [
+  "jerry.shimizutechnology@gmail.com",
+  "lmshimizu@gmail.com",
+];
+
 export const getOrCreate = mutation({
   args: {},
   handler: async (ctx) => {
@@ -38,12 +44,15 @@ export const getOrCreate = mutation({
 
     if (existing) return existing._id;
 
+    const email = identity.email ?? "";
+    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase());
+
     return await ctx.db.insert("users", {
       tokenIdentifier: identity.tokenIdentifier,
       name: identity.name ?? "Anonymous",
       email: identity.email,
       avatarUrl: identity.pictureUrl,
-      role: "user",
+      role: isAdmin ? "admin" : "user",
       isBanned: false,
       isPremium: false,
       createdAt: Date.now(),
