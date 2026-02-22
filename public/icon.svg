@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="96" fill="#3d405b"/>
+  <!-- Two crossing arrows forming an X -->
+  <path d="M140 160 L372 352" stroke="#e07a5f" stroke-width="40" stroke-linecap="round"/>
+  <path d="M372 160 L140 352" stroke="#81b29a" stroke-width="40" stroke-linecap="round"/>
+  <!-- Arrow heads -->
+  <path d="M340 150 L380 160 L370 200" stroke="#e07a5f" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M172 150 L132 160 L142 200" stroke="#81b29a" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

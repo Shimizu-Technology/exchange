@@ -4,10 +4,16 @@
   "description": "Sell stuff from your ex. Buy someone else's baggage. Every item has a story.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#faf8f5",
-  "theme_color": "#e91e8c",
+  "background_color": "#fefcf3",
+  "theme_color": "#3d405b",
   "orientation": "portrait-primary",
+  "categories": ["shopping", "lifestyle"],
   "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",

@@ -6,6 +6,7 @@ import { Home, PlusCircle, MessageCircle, User, Search } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/brand/logo";
 
 const navItems = [
   { href: "/", icon: Home, label: "Home" },
@@ -69,9 +70,7 @@ export function TopNav() {
     <header className="hidden md:block sticky top-0 z-50 bg-cream/90 backdrop-blur-xl border-b border-charcoal/5">
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <span className="font-display text-2xl font-bold tracking-tight text-ocean">
-            ex<span className="text-coral">change</span>
-          </span>
+          <Logo size="md" />
         </Link>
 
         <nav className="flex items-center gap-1">
