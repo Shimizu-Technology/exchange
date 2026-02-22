@@ -42,7 +42,21 @@ export const getOrCreate = mutation({
       .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
       .first();
 
-    if (existing) return existing._id;
+    if (existing) {
+      // Update profile info from latest identity (email, name, avatar may have been missing)
+      const updates: Record<string, any> = {};
+      if (identity.email && existing.email !== identity.email) updates.email = identity.email;
+      if (identity.name && existing.name !== identity.name && existing.name === "Anonymous") updates.name = identity.name;
+      if (identity.pictureUrl && existing.avatarUrl !== identity.pictureUrl) updates.avatarUrl = identity.pictureUrl;
+      // Re-check admin status if email changed
+      if (updates.email && ADMIN_EMAILS.includes(updates.email.toLowerCase()) && existing.role !== "admin") {
+        updates.role = "admin";
+      }
+      if (Object.keys(updates).length > 0) {
+        await ctx.db.patch(existing._id, updates);
+      }
+      return existing._id;
+    }
 
     const email = identity.email ?? "";
     const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase());
@@ -137,3 +151,5 @@ export const getListingCount = query({
     return listings.length;
   },
 });
+
+// Debug: check current identity
