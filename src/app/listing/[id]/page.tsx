@@ -272,7 +272,7 @@ export default function ListingDetailPage() {
       <div className="flex items-center gap-3 mb-8">
         {isOwner ? (
           <Link
-            href={`/dashboard`}
+            href={`/listing/${listingId}/edit`}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-charcoal text-white rounded-2xl font-display font-bold hover:bg-ocean transition-colors"
           >
             <Pencil className="w-5 h-5" /> Edit Listing
