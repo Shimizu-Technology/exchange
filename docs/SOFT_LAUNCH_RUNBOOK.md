@@ -41,7 +41,7 @@ Include:
 2. Run smoke checks:
    - `/`, `/search`, `/sell`, listing detail, `/terms`, `/privacy`, `/prohibited-items`
    - `/sign-in` and `/sign-up` routes load and are functional
-3. Post launch message to pilot cohort with clear feedback channel
+3. Post launch message to pilot cohort with feedback channel: `#exchange-pilot-feedback` (or documented equivalent)
 4. Monitor first 2 hours closely:
    - listing creation failures
    - upload failures
@@ -98,6 +98,8 @@ Per issue capture:
 - Steps to reproduce
 - Expected vs actual
 - Severity (P0/P1/P2)
+- Owner (who is tracking resolution)
+- Resolution status
 
 Store consolidated notes in launch log: `docs/launch-logs/<YYYY-MM-DD>-pilot.md`.
 

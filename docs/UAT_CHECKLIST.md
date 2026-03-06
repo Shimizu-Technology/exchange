@@ -34,7 +34,7 @@ Owner: Leon / Shimizu Technology
 - [ ] `/sell` step navigation works (required fields enforced)
 - [ ] Description min length enforced in-step
 - [ ] Paid listing price validation prevents near-zero invalid values
-- [ ] Paid boost / promoted listing checkout completes successfully (test card)
+- [ ] Paid boost / promoted listing checkout completes successfully (if Stripe mode is TEST: use Stripe test card; if LIVE: use real card or coordinate temporary key-swap)
 - [ ] Failed payment surfaces clear error to the user
 - [ ] Post-payment listing state reflects boost correctly
 - [ ] Image upload accepts valid images and stores URLs
