@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORIES, AREAS, CONDITIONS, formatPrice } from "@/lib/utils";
 import {
   Camera, ArrowLeft, ArrowRight, Check, X, ImagePlus,
-  MapPin, Tag, Sparkles, DollarSign, Eye, Heart,
+  MapPin, Tag, Sparkles, DollarSign, Eye, Heart, Upload,
 } from "lucide-react";
 import { trackEvent } from "@/components/analytics/posthog-provider";
 
@@ -25,9 +26,13 @@ export default function SellPage() {
   const router = useRouter();
   const currentUser = useQuery(api.users.getMe);
   const createListing = useMutation(api.listings.create);
+  const generateUploadUrl = useMutation(api.listings.generateUploadUrl);
+  const resolveImageUrl = useAction(api.listings.resolveImageUrl);
 
   const [step, setStep] = useState(0);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -54,6 +59,45 @@ export default function SellPage() {
       default: return false;
     }
   };
+
+  const handlePhotoSelect = useCallback(async (file: File | null) => {
+    if (!file) return;
+    setUploadError(null);
+
+    if (!file.type.startsWith("image/")) {
+      setUploadError("Please upload an image file (jpg, png, webp, etc).");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError("Image must be 10MB or smaller.");
+      return;
+    }
+
+    try {
+      setUploadingPhoto(true);
+      const uploadUrl = await generateUploadUrl();
+      const uploadResult = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+
+      if (!uploadResult.ok) {
+        throw new Error("Upload failed. Please retry.");
+      }
+
+      const payload = (await uploadResult.json()) as { storageId?: Id<"_storage"> };
+      if (!payload.storageId) throw new Error("Upload response missing storage id.");
+
+      const imageUrl = await resolveImageUrl({ storageId: payload.storageId });
+      setPhotos((prev) => [...prev, imageUrl].slice(0, 5));
+    } catch (e: any) {
+      setUploadError(e?.message || "Photo upload failed. Please retry.");
+    } finally {
+      setUploadingPhoto(false);
+    }
+  }, [generateUploadUrl, resolveImageUrl]);
 
   const handleSubmit = useCallback(async () => {
     setSubmitError(null);
@@ -138,16 +182,37 @@ export default function SellPage() {
                   </div>
                 ))}
                 {photos.length < 5 && (
-                  <button className="aspect-square rounded-xl border-2 border-dashed border-charcoal/10 hover:border-coral/30 flex flex-col items-center justify-center gap-1.5 transition-colors group">
-                    <ImagePlus className="w-8 h-8 text-muted/40 group-hover:text-coral/60 transition-colors" />
-                    <span className="text-xs text-muted/40 group-hover:text-coral/60 transition-colors">Add photo</span>
-                  </button>
+                  <label className="aspect-square rounded-xl border-2 border-dashed border-charcoal/10 hover:border-coral/30 flex flex-col items-center justify-center gap-1.5 transition-colors group cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={uploadingPhoto}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] ?? null;
+                        void handlePhotoSelect(file);
+                        e.currentTarget.value = "";
+                      }}
+                    />
+                    {uploadingPhoto ? (
+                      <Upload className="w-8 h-8 text-coral animate-pulse" />
+                    ) : (
+                      <ImagePlus className="w-8 h-8 text-muted/40 group-hover:text-coral/60 transition-colors" />
+                    )}
+                    <span className="text-xs text-muted/40 group-hover:text-coral/60 transition-colors">
+                      {uploadingPhoto ? "Uploading..." : "Add photo"}
+                    </span>
+                  </label>
                 )}
               </div>
 
-              <p className="text-muted/60 text-xs mt-4 text-center">
-                Photo upload coming soon — listings will work without photos for now
-              </p>
+              {uploadError ? (
+                <p className="text-coral text-xs mt-4 text-center">{uploadError}</p>
+              ) : (
+                <p className="text-muted/60 text-xs mt-4 text-center">
+                  Add up to 5 photos. Bigger photos help listings convert faster.
+                </p>
+              )}
             </div>
           )}
 

@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, mutation, internalMutation } from "./_generated/server";
+import { action, query, mutation, internalMutation } from "./_generated/server";
 import {
   MARKETPLACE_AREAS,
   MARKETPLACE_CATEGORIES,
@@ -313,9 +313,20 @@ export const generateUploadUrl = mutation({
 });
 
 export const getImageUrl = query({
-  args: { storageId: v.string() },
+  args: { storageId: v.id("_storage") },
   handler: async (ctx, args) => {
-    return await ctx.storage.getUrl(args.storageId as any);
+    return await ctx.storage.getUrl(args.storageId);
+  },
+});
+
+export const resolveImageUrl = action({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    const url = await ctx.storage.getUrl(args.storageId);
+    if (!url) throw new Error("Could not resolve uploaded image URL");
+    return url;
   },
 });
 
