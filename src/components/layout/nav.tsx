@@ -96,7 +96,7 @@ export function TopNav() {
             href="/sell"
             className="ml-3 px-5 py-2 bg-coral text-white rounded-full text-sm font-semibold hover:bg-coral-dark transition-all duration-200"
           >
-            List an item
+            Cash out your ex
           </Link>
 
           <Link

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { CATEGORIES } from "@/lib/utils";
@@ -8,6 +8,13 @@ import { formatPrice, formatTimeAgo } from "@/lib/utils";
 import { motion, type Variants } from "framer-motion";
 import { Search, MapPin, HeartCrack, Zap, Heart } from "lucide-react";
 import Link from "next/link";
+
+const TAGLINES = [
+  "He bought it. You profit.",
+  "Breakup? Make it bank-up.",
+  "From ex to extra cash.",
+  "Moving on, making money.",
+] as const;
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -21,6 +28,15 @@ const fadeUp: Variants = {
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [taglineIndex, setTaglineIndex] = useState(0);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setTaglineIndex((prev) => (prev + 1) % TAGLINES.length);
+    }, 4500);
+
+    return () => window.clearInterval(id);
+  }, []);
 
   const listings = useQuery(api.listings.list, {
     category: selectedCategory === "All" ? undefined : selectedCategory,
@@ -49,9 +65,12 @@ export default function HomePage() {
               <span className="text-coral not-italic">Ex.</span>
             </h1>
           </div>
-          <p className="hidden md:block text-muted text-sm max-w-[180px] text-right leading-relaxed">
-            The marketplace where breakups become business. Every listing tells a story.
-          </p>
+          <div className="hidden md:block text-right">
+            <p className="text-muted text-sm max-w-[220px] leading-relaxed">
+              The marketplace where breakups become business. Every listing tells a story.
+            </p>
+            <p className="mt-2 text-coral text-xs font-semibold">{TAGLINES[taglineIndex]}</p>
+          </div>
         </div>
         <div className="h-px bg-gradient-to-r from-coral via-sage/50 to-transparent mt-8" />
       </motion.div>
@@ -131,7 +150,7 @@ export default function HomePage() {
       ) : rest.length === 0 && featured.length === 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
           <HeartCrack className="w-12 h-12 text-coral/15 mx-auto mb-4" />
-          <p className="text-muted text-sm italic">nothing here yet</p>
+          <p className="text-muted text-sm italic">No listings yet. Be the first to turn heartbreak into extra cash.</p>
         </motion.div>
       ) : (
         <motion.div
