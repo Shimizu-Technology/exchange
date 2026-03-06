@@ -70,7 +70,7 @@ export function TopNav() {
     <header className="hidden md:block sticky top-0 z-50 bg-cream/90 backdrop-blur-xl border-b border-charcoal/5">
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <Logo size="md" />
+          <span className="font-display font-bold text-xl text-ocean">Shoutout <span className="text-coral">to my Ex</span></span>
         </Link>
 
         <nav className="flex items-center gap-1">
