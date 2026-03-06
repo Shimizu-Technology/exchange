@@ -256,7 +256,7 @@ export const update = mutation({
     const updates: Record<string, unknown> = { updatedAt: Date.now() };
     if (args.title !== undefined) updates.title = args.title.trim();
     if (args.description !== undefined) updates.description = args.description.trim();
-    if (args.story !== undefined) updates.story = args.story.trim();
+    if (args.story !== undefined) updates.story = args.story.trim() || undefined;
     if (args.price !== undefined) updates.price = Math.round(args.price);
     if (args.photos !== undefined) updates.photos = args.photos.map((p) => p.trim());
     if (args.category !== undefined) updates.category = args.category;
