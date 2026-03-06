@@ -211,7 +211,7 @@ export const create = mutation({
       title: args.title.trim(),
       description: args.description.trim(),
       story: args.story?.trim() || undefined,
-      price: Math.round(args.price),
+      price: args.price,
       photos: args.photos.map((p) => p.trim()),
       category: args.category,
       area: args.area,
@@ -260,7 +260,7 @@ export const update = mutation({
     if (args.title !== undefined) updates.title = args.title.trim();
     if (args.description !== undefined) updates.description = args.description.trim();
     if (args.story !== undefined) updates.story = args.story.trim() || undefined;
-    if (args.price !== undefined) updates.price = Math.round(args.price);
+    if (args.price !== undefined) updates.price = args.price;
     if (args.photos !== undefined) updates.photos = args.photos.map((p) => p.trim());
     if (args.category !== undefined) updates.category = args.category;
     if (args.area !== undefined) updates.area = args.area;
