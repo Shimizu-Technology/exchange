@@ -96,17 +96,22 @@ export const listReports = query({
     await requireAdmin(ctx);
     const reports = await ctx.db.query("reports").order("desc").collect();
 
-    return await Promise.all(
-      reports.map(async (report) => {
-        const listing = await ctx.db.get(report.listingId);
-        const reporter = await ctx.db.get(report.reporterId);
-        return {
-          ...report,
-          listing,
-          reporter,
-        };
-      }),
-    );
+    const listingIds = [...new Set(reports.map((r) => r.listingId))];
+    const reporterIds = [...new Set(reports.map((r) => r.reporterId))];
+
+    const [listings, reporters] = await Promise.all([
+      Promise.all(listingIds.map((id) => ctx.db.get(id))),
+      Promise.all(reporterIds.map((id) => ctx.db.get(id))),
+    ]);
+
+    const listingMap = new Map(listingIds.map((id, i) => [id, listings[i] ?? null]));
+    const reporterMap = new Map(reporterIds.map((id, i) => [id, reporters[i] ?? null]));
+
+    return reports.map((report) => ({
+      ...report,
+      listing: listingMap.get(report.listingId) ?? null,
+      reporter: reporterMap.get(report.reporterId) ?? null,
+    }));
   },
 });
 

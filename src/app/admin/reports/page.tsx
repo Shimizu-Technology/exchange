@@ -86,7 +86,7 @@ export default function AdminReportsPage() {
                       className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <EyeOff className="w-4 h-4" />
-                      Hide listing
+                      {isReportLoading ? "Working..." : "Hide listing"}
                     </button>
                     <button
                       onClick={() => {
@@ -98,7 +98,7 @@ export default function AdminReportsPage() {
                       className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-coral/10 text-coral hover:bg-coral/20 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Trash2 className="w-4 h-4" />
-                      Remove listing
+                      {isReportLoading ? "Working..." : "Remove listing"}
                     </button>
                   </div>
                 </div>
