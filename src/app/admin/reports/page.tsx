@@ -4,11 +4,13 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
 import { CheckCircle, Clock, EyeOff, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function AdminReportsPage() {
   const reportsData = useQuery(api.admin.listReports);
   const reports: any[] = reportsData ?? [];
   const moderateReport = useMutation(api.admin.moderateReport);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const pending = reports.filter((r: any) => r.status === "pending");
   const resolved = reports.filter((r: any) => r.status === "resolved");
@@ -17,7 +19,13 @@ export default function AdminReportsPage() {
     reportId: Id<"reports">,
     action: "resolve" | "hide" | "remove",
   ) => {
-    await moderateReport({ reportId, action });
+    setActionError(null);
+    try {
+      await moderateReport({ reportId, action });
+    } catch (err) {
+      console.error("Moderation action failed", err);
+      setActionError("Action failed. Please try again.");
+    }
   };
 
   return (
@@ -53,14 +61,14 @@ export default function AdminReportsPage() {
 
                   <div className="flex flex-wrap gap-2">
                     <button
-                      onClick={() => handleModerate(report._id, "resolve")}
+                      onClick={() => void handleModerate(report._id, "resolve")}
                       className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-sage/10 text-sage hover:bg-sage/20 transition-colors font-medium"
                     >
                       <CheckCircle className="w-4 h-4" />
                       Resolve
                     </button>
                     <button
-                      onClick={() => handleModerate(report._id, "hide")}
+                      onClick={() => void handleModerate(report._id, "hide")}
                       disabled={!report.listing}
                       className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
@@ -84,6 +92,12 @@ export default function AdminReportsPage() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {actionError && (
+        <div className="mb-4 rounded-lg border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
+          {actionError}
         </div>
       )}
 

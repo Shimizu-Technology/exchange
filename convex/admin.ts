@@ -126,6 +126,7 @@ export const moderateReport = mutation({
       if (!listing) throw new Error("Listing not found");
 
       if (args.action === "hide") {
+        // Moderation actions always enforce hidden=true (never toggle).
         await ctx.db.patch(report.listingId, { isHidden: true, updatedAt: Date.now() });
       }
 
