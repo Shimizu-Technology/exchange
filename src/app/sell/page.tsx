@@ -37,6 +37,7 @@ export default function SellPage() {
   const [price, setPrice] = useState("");
   const [isFree, setIsFree] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const canProceed = () => {
     switch (step) {
@@ -50,8 +51,9 @@ export default function SellPage() {
   };
 
   const handleSubmit = useCallback(async () => {
+    setSubmitError(null);
     if (!currentUser) {
-      alert("Please sign in to post a listing!");
+      setSubmitError("Please sign in to post a listing.");
       return;
     }
     setSubmitting(true);
@@ -69,7 +71,7 @@ export default function SellPage() {
       trackEvent("listing_created", { listingId, title: title.trim(), category, area, price: isFree ? 0 : Number(price) });
       router.push(`/listing/${listingId}`);
     } catch (e: any) {
-      alert(e.message || "Something went wrong");
+      setSubmitError(e?.message || "Something went wrong. Please retry.");
       setSubmitting(false);
     }
   }, [currentUser, createListing, title, description, story, isFree, price, photos, category, area, condition, router]);
@@ -371,6 +373,12 @@ export default function SellPage() {
           </button>
         )}
       </div>
+
+      {submitError && (
+        <div className="mt-3 rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
+          {submitError}
+        </div>
+      )}
     </div>
   );
 }
