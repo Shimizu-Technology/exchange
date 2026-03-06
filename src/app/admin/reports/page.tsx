@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function AdminReportsPage() {
   const reportsData = useQuery(api.admin.listReports);
-  const reports: any[] = reportsData ?? [];
+  const reports = reportsData ?? [];
   const moderateReport = useMutation(api.admin.moderateReport);
   const [actionError, setActionError] = useState<string | null>(null);
 
