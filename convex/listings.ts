@@ -319,6 +319,17 @@ export const getImageUrl = query({
   },
 });
 
+export const resolveImageUrl = mutation({
+  args: { storageId: v.string() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    const url = await ctx.storage.getUrl(args.storageId as any);
+    if (!url) throw new Error("Could not resolve uploaded image URL");
+    return url;
+  },
+});
+
 export const boostListing = mutation({
   args: {
     id: v.id("listings"),
