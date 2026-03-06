@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useConvex, useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { useRouter } from "next/navigation";
@@ -25,9 +25,9 @@ const storyPrompts = [
 export default function SellPage() {
   const router = useRouter();
   const currentUser = useQuery(api.users.getMe);
-  const convex = useConvex();
   const createListing = useMutation(api.listings.create);
   const generateUploadUrl = useMutation(api.listings.generateUploadUrl);
+  const resolveImageUrl = useAction(api.listings.resolveImageUrl);
 
   const [step, setStep] = useState(0);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -90,16 +90,14 @@ export default function SellPage() {
       const payload = (await uploadResult.json()) as { storageId?: Id<"_storage"> };
       if (!payload.storageId) throw new Error("Upload response missing storage id.");
 
-      const imageUrl = await convex.query(api.listings.resolveImageUrl, {
-        storageId: payload.storageId,
-      });
+      const imageUrl = await resolveImageUrl({ storageId: payload.storageId });
       setPhotos((prev) => [...prev, imageUrl].slice(0, 5));
     } catch (e: any) {
       setUploadError(e?.message || "Photo upload failed. Please retry.");
     } finally {
       setUploadingPhoto(false);
     }
-  }, [generateUploadUrl, convex]);
+  }, [generateUploadUrl, resolveImageUrl]);
 
   const handleSubmit = useCallback(async () => {
     setSubmitError(null);

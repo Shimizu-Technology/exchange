@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, mutation, internalMutation } from "./_generated/server";
+import { action, query, mutation, internalMutation } from "./_generated/server";
 import {
   MARKETPLACE_AREAS,
   MARKETPLACE_CATEGORIES,
@@ -319,7 +319,7 @@ export const getImageUrl = query({
   },
 });
 
-export const resolveImageUrl = query({
+export const resolveImageUrl = action({
   args: { storageId: v.id("_storage") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
