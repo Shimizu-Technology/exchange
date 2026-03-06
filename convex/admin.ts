@@ -94,14 +94,52 @@ export const listReports = query({
   args: {},
   handler: async (ctx) => {
     await requireAdmin(ctx);
-    return await ctx.db.query("reports").order("desc").collect();
+    const reports = await ctx.db.query("reports").order("desc").collect();
+
+    const listingIds = [...new Set(reports.map((r) => r.listingId))];
+    const reporterIds = [...new Set(reports.map((r) => r.reporterId))];
+
+    const [listings, reporters] = await Promise.all([
+      Promise.all(listingIds.map((id) => ctx.db.get(id))),
+      Promise.all(reporterIds.map((id) => ctx.db.get(id))),
+    ]);
+
+    const listingMap = new Map(listingIds.map((id, i) => [id, listings[i] ?? null]));
+    const reporterMap = new Map(reporterIds.map((id, i) => [id, reporters[i] ?? null]));
+
+    return reports.map((report) => ({
+      ...report,
+      listing: listingMap.get(report.listingId) ?? null,
+      reporter: reporterMap.get(report.reporterId) ?? null,
+    }));
   },
 });
 
-export const resolveReport = mutation({
-  args: { reportId: v.id("reports") },
+export const moderateReport = mutation({
+  args: {
+    reportId: v.id("reports"),
+    action: v.union(v.literal("resolve"), v.literal("hide"), v.literal("remove")),
+  },
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
+
+    const report = await ctx.db.get(args.reportId);
+    if (!report) throw new Error("Report not found");
+
+    if (args.action === "hide" || args.action === "remove") {
+      const listing = await ctx.db.get(report.listingId);
+      if (!listing) throw new Error("Listing not found");
+
+      if (args.action === "hide") {
+        // Moderation actions always enforce hidden=true (never toggle).
+        await ctx.db.patch(report.listingId, { isHidden: true, updatedAt: Date.now() });
+      }
+
+      if (args.action === "remove") {
+        await ctx.db.patch(report.listingId, { status: "removed", updatedAt: Date.now() });
+      }
+    }
+
     await ctx.db.patch(args.reportId, { status: "resolved" });
   },
 });
