@@ -112,5 +112,6 @@ Owner: Leon / Shimizu Technology
 - Tested by:
 - Environment URL:
 - Build / Commit SHA:
+- Stripe mode: TEST / LIVE
 - Result: PASS / PASS WITH NOTES / FAIL
 - Notes:

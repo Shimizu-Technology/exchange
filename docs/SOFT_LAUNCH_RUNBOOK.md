@@ -78,6 +78,12 @@ Operational thresholds (initial):
 ### Full rollback (if critical)
 - If deployed via Vercel/Netlify dashboard: Deployments -> select last known stable commit -> Redeploy
 - If rollback via git: `git checkout main && git revert <bad_sha> && git push` to trigger CI/CD redeploy
+
+### Convex backend rollback
+- Convex dashboard -> Deployments -> identify last known stable deployment -> redeploy, OR
+- From last known stable commit: run `npx convex deploy --prod` to restore stable Convex functions
+- If schema/data migration is involved, coordinate with engineering before redeploying to avoid data-shape mismatches
+
 - Post short incident notice in pilot channel
 - Resume after hotfix verification
 
