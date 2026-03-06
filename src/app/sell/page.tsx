@@ -444,9 +444,11 @@ export default function SellPage() {
         )}
       </div>
 
-      <p className="mt-3 text-xs text-muted">
-        By posting, you agree to our <a href="/terms" className="underline hover:text-charcoal">Terms</a> and acknowledge our <a href="/prohibited-items" className="underline hover:text-charcoal">Prohibited Items</a> policy.
-      </p>
+      {step === STEPS.length - 1 && (
+        <p className="mt-3 text-xs text-muted">
+          By posting, you agree to our <a href="/terms" className="underline hover:text-charcoal">Terms</a> and acknowledge our <a href="/prohibited-items" className="underline hover:text-charcoal">Prohibited Items</a> policy.
+        </p>
+      )}
 
       {submitError && (
         <div className="mt-3 rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">

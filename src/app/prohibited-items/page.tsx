@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Prohibited Items",
+};
+
 const PROHIBITED = [
   "Stolen or illegally obtained items",
   "Weapons, explosives, or dangerous materials",
