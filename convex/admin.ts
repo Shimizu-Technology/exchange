@@ -94,14 +94,41 @@ export const listReports = query({
   args: {},
   handler: async (ctx) => {
     await requireAdmin(ctx);
-    return await ctx.db.query("reports").order("desc").collect();
+    const reports = await ctx.db.query("reports").order("desc").collect();
+
+    return await Promise.all(
+      reports.map(async (report) => {
+        const listing = await ctx.db.get(report.listingId);
+        const reporter = await ctx.db.get(report.reporterId);
+        return {
+          ...report,
+          listing,
+          reporter,
+        };
+      }),
+    );
   },
 });
 
-export const resolveReport = mutation({
-  args: { reportId: v.id("reports") },
+export const moderateReport = mutation({
+  args: {
+    reportId: v.id("reports"),
+    action: v.union(v.literal("resolve"), v.literal("hide"), v.literal("remove")),
+  },
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
+
+    const report = await ctx.db.get(args.reportId);
+    if (!report) throw new Error("Report not found");
+
+    if (args.action === "hide") {
+      await ctx.db.patch(report.listingId, { isHidden: true, updatedAt: Date.now() });
+    }
+
+    if (args.action === "remove") {
+      await ctx.db.patch(report.listingId, { status: "removed", updatedAt: Date.now() });
+    }
+
     await ctx.db.patch(args.reportId, { status: "resolved" });
   },
 });

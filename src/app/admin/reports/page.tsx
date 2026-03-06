@@ -1,16 +1,23 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { CheckCircle, Clock } from "lucide-react";
+import { CheckCircle, Clock, EyeOff, Trash2 } from "lucide-react";
 
 export default function AdminReportsPage() {
   const reportsData = useQuery(api.admin.listReports);
   const reports: any[] = reportsData ?? [];
-  const resolveReport = useMutation(api.admin.resolveReport);
+  const moderateReport = useMutation(api.admin.moderateReport);
 
   const pending = reports.filter((r: any) => r.status === "pending");
   const resolved = reports.filter((r: any) => r.status === "resolved");
+
+  const handleModerate = async (
+    reportId: string,
+    action: "resolve" | "hide" | "remove",
+  ) => {
+    await moderateReport({ reportId: reportId as any, action });
+  };
 
   return (
     <div>
@@ -25,23 +32,47 @@ export default function AdminReportsPage() {
           <div className="space-y-3">
             {pending.map((report) => (
               <div key={report._id} className="bg-white rounded-xl p-5 border border-charcoal/5 shadow-sm">
-                <div className="flex items-start justify-between">
+                <div className="space-y-3">
                   <div>
                     <p className="font-medium text-charcoal mb-1">{report.reason}</p>
-                    {report.details && (
-                      <p className="text-sm text-muted mb-2">{report.details}</p>
-                    )}
+                    {report.details && <p className="text-sm text-muted mb-2">{report.details}</p>}
                     <p className="text-xs text-muted">
-                      {new Date(report.createdAt).toLocaleDateString()}
+                      {new Date(report.createdAt).toLocaleDateString()} · Reporter: {report.reporter?.name ?? "Unknown"}
                     </p>
                   </div>
-                  <button
-                    onClick={() => resolveReport({ reportId: report._id })}
-                    className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-sage/10 text-sage hover:bg-sage/20 transition-colors font-medium"
-                  >
-                    <CheckCircle className="w-4 h-4" />
-                    Resolve
-                  </button>
+
+                  <div className="rounded-lg border border-charcoal/10 p-3 bg-cream/60">
+                    <p className="text-sm font-medium text-charcoal">{report.listing?.title ?? "Listing unavailable"}</p>
+                    {report.listing && (
+                      <p className="text-xs text-muted mt-1">
+                        Status: {report.listing.status} · Hidden: {report.listing.isHidden ? "yes" : "no"}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => handleModerate(report._id, "resolve")}
+                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-sage/10 text-sage hover:bg-sage/20 transition-colors font-medium"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      Resolve
+                    </button>
+                    <button
+                      onClick={() => handleModerate(report._id, "hide")}
+                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium"
+                    >
+                      <EyeOff className="w-4 h-4" />
+                      Hide listing
+                    </button>
+                    <button
+                      onClick={() => handleModerate(report._id, "remove")}
+                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-coral/10 text-coral hover:bg-coral/20 transition-colors font-medium"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Remove listing
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
