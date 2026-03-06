@@ -1,30 +1,14 @@
 import { v } from "convex/values";
 import { query, mutation, internalMutation } from "./_generated/server";
+import {
+  MARKETPLACE_AREAS,
+  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_CONDITIONS,
+} from "../shared/marketplace-constants";
 
-const ALLOWED_CATEGORIES = new Set([
-  "Jewelry & Watches",
-  "Clothes & Accessories",
-  "Electronics",
-  "Furniture & Home",
-  "Books & Media",
-  "Gifts & Misc",
-  "Stuff They Left Behind",
-]);
-
-const ALLOWED_AREAS = new Set([
-  "Dededo", "Yigo", "Tamuning", "Tumon", "Hagatna",
-  "Mangilao", "Barrigada", "Chalan Pago", "Sinajana",
-  "Agana Heights", "Mongmong-Toto-Maite", "Asan", "Piti",
-  "Santa Rita", "Agat", "Talofofo", "Inarajan", "Merizo", "Umatac",
-]);
-
-const ALLOWED_CONDITIONS = new Set([
-  "New",
-  "Like New",
-  "Good",
-  "Fair",
-  "It's Been Through a Lot",
-]);
+const ALLOWED_CATEGORIES: Set<string> = new Set(MARKETPLACE_CATEGORIES);
+const ALLOWED_AREAS: Set<string> = new Set(MARKETPLACE_AREAS);
+const ALLOWED_CONDITIONS: Set<string> = new Set(MARKETPLACE_CONDITIONS);
 
 function validateListingInput(args: {
   title?: string;
@@ -272,7 +256,7 @@ export const update = mutation({
     const updates: Record<string, unknown> = { updatedAt: Date.now() };
     if (args.title !== undefined) updates.title = args.title.trim();
     if (args.description !== undefined) updates.description = args.description.trim();
-    if (args.story !== undefined) updates.story = args.story.trim() || undefined;
+    if (args.story !== undefined) updates.story = args.story.trim();
     if (args.price !== undefined) updates.price = Math.round(args.price);
     if (args.photos !== undefined) updates.photos = args.photos.map((p) => p.trim());
     if (args.category !== undefined) updates.category = args.category;
