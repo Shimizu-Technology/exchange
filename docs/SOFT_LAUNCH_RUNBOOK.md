@@ -39,6 +39,7 @@ Include:
 1. Confirm latest `main` deployed to production
 2. Run smoke checks:
    - `/`, `/search`, `/sell`, listing detail, `/terms`, `/privacy`, `/prohibited-items`
+   - `/sign-in` and `/sign-up` routes load and are functional
 3. Post launch message to pilot cohort with clear feedback channel
 4. Monitor first 2 hours closely:
    - listing creation failures

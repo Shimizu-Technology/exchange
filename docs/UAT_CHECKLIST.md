@@ -10,7 +10,16 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## A) Public Marketplace Flows
+## A) Authentication (Clerk)
+
+- [ ] Sign-up flow completes and redirects correctly
+- [ ] Sign-in flow works for existing user
+- [ ] Sign-out clears session and redirects to home
+- [ ] Unauthenticated user attempting `/sell` is redirected to sign-in
+
+---
+
+## B) Public Marketplace Flows
 
 - [ ] Home page loads and branding copy appears correctly
 - [ ] Search page loads with listings and filters
@@ -20,18 +29,21 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## B) Seller Listing Creation Flow
+## C) Seller Listing Creation Flow
 
 - [ ] `/sell` step navigation works (required fields enforced)
 - [ ] Description min length enforced in-step
 - [ ] Paid listing price validation prevents near-zero invalid values
+- [ ] Paid boost / promoted listing checkout completes successfully (test card)
+- [ ] Failed payment surfaces clear error to the user
+- [ ] Post-payment listing state reflects boost correctly
 - [ ] Image upload accepts valid images and stores URLs
 - [ ] Upload failure shows inline error and preserves form state
 - [ ] Listing publish succeeds and appears publicly
 
 ---
 
-## C) Seller Dashboard / Ownership Controls
+## D) Seller Dashboard / Ownership Controls
 
 - [ ] Seller can view own listings in dashboard
 - [ ] Seller can edit own listing
@@ -40,7 +52,7 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## D) Messaging / Contact Intent
+## E) Messaging / Contact Intent
 
 - [ ] Buyer can initiate contact from listing
 - [ ] Contact click intent path works on mobile + desktop
@@ -48,7 +60,7 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## E) Moderation / Admin
+## F) Moderation / Admin
 
 - [ ] Admin reports page loads pending + resolved queues
 - [ ] Report cards show reporter + listing context
@@ -59,7 +71,7 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## F) Legal + Policy
+## G) Legal + Policy
 
 - [ ] `/terms` page accessible and content complete
 - [ ] `/privacy` page accessible and content complete
@@ -69,7 +81,7 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## G) Analytics + Error Visibility (Quick Sanity)
+## H) Analytics + Error Visibility (Quick Sanity)
 
 - [ ] Core pages render without runtime errors
 - [ ] Listing creation and moderation actions produce expected logs/events
@@ -77,7 +89,7 @@ Owner: Leon / Shimizu Technology
 
 ---
 
-## H) Mobile Pass
+## I) Mobile Pass
 
 ### iOS Safari
 - [ ] Home/search/listing pages usable
