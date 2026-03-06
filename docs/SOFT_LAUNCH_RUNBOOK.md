@@ -84,8 +84,9 @@ Operational thresholds (initial):
 - From last known stable commit: run `npx convex deploy --prod` to restore stable Convex functions
 - If schema/data migration is involved, coordinate with engineering before redeploying to avoid data-shape mismatches
 
-- Post short incident notice in pilot channel
-- Resume after hotfix verification
+### Post-rollback steps (all scenarios)
+- Post short incident notice in pilot channel (`#exchange-pilot-feedback`)
+- Resume normal operations only after hotfix verification
 
 ---
 
@@ -111,9 +112,9 @@ After first 24–72 hours:
 - [ ] Review metrics + issue volume
 - [ ] Classify defects (P0/P1/P2)
 - [ ] Decide:
-  - continue pilot
-  - expand cohort
-  - pause for hardening
+  - **continue pilot**: no P0 issues, P1 count < 3 and trending down
+  - **expand cohort**: all P0/P1 resolved, core flows stable over 48h with no new blockers
+  - **pause for hardening**: any unresolved P0, or P1 volume not trending down after 48h
 
 ---
 
@@ -122,7 +123,7 @@ After first 24–72 hours:
 - Product/Owner: Leon
 - Engineering: Theo (implementation)
 - Moderation/Admin on-call: (assign before launch)
-- Payment escalation: Stripe dashboard + logs
+- Payment escalation: Leon (Stripe dashboard + logs)
 
 ---
 
