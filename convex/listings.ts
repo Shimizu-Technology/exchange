@@ -313,20 +313,29 @@ export const generateUploadUrl = mutation({
 });
 
 export const getImageUrl = query({
-  args: { storageId: v.string() },
+  args: { storageId: v.id("_storage") },
   handler: async (ctx, args) => {
-    return await ctx.storage.getUrl(args.storageId as any);
+    return await ctx.storage.getUrl(args.storageId);
   },
 });
 
 export const resolveImageUrl = mutation({
-  args: { storageId: v.string() },
+  args: { storageId: v.id("_storage") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
-    const url = await ctx.storage.getUrl(args.storageId as any);
+    const url = await ctx.storage.getUrl(args.storageId);
     if (!url) throw new Error("Could not resolve uploaded image URL");
     return url;
+  },
+});
+
+export const deleteUploadedImage = mutation({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    await ctx.storage.delete(args.storageId);
   },
 });
 
