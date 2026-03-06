@@ -34,6 +34,9 @@ export default function PrivacyPage() {
           You can edit or remove your listings, and you can request account removal by emailing
           {" "}<a href="mailto:support@exchange-guam.com" className="underline hover:text-charcoal">support@exchange-guam.com</a>.
         </p>
+        <p className="text-charcoal/80">
+          Account data is typically deleted within 30 days of a verified removal request. Anonymized or aggregated analytics data may be retained longer.
+        </p>
       </section>
     </div>
   );

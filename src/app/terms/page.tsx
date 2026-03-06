@@ -57,6 +57,23 @@ export default function TermsPage() {
           These Terms are governed by the laws of Guam, U.S.A. Any disputes arising from use of the platform are subject to the exclusive jurisdiction of the courts of Guam.
         </p>
       </section>
+
+      <section className="space-y-2">
+        <h2 className="font-semibold text-charcoal">7. Limitation of liability</h2>
+        <p className="text-charcoal/80">
+          To the maximum extent permitted by law, ExChange and its operators are not liable for any indirect, incidental, special, or consequential damages arising from use of the platform. Our total liability for any claim is limited to the fees, if any, you paid to ExChange in the 30 days preceding the claim.
+        </p>
+        <p className="text-charcoal/80">
+          The platform is provided "as is" without warranties of any kind, express or implied.
+        </p>
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="font-semibold text-charcoal">8. Changes to these Terms</h2>
+        <p className="text-charcoal/80">
+          We may update these Terms from time to time. When we do, we will update the "Last updated" date above. Continued use of the platform after changes are posted constitutes acceptance of the revised Terms.
+        </p>
+      </section>
     </div>
   );
 }
