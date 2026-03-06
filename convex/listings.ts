@@ -38,8 +38,11 @@ function validateListingInput(args: {
     throw new Error("Story must be 2000 characters or less");
   }
 
-  if (args.price !== undefined && (!Number.isFinite(args.price) || args.price < 0)) {
-    throw new Error("Price must be a non-negative number");
+  if (
+    args.price !== undefined &&
+    (!Number.isFinite(args.price) || args.price < 0 || !Number.isInteger(args.price))
+  ) {
+    throw new Error("Price must be a non-negative integer (cents)");
   }
 
   if (args.photos !== undefined) {
