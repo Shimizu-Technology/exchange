@@ -102,6 +102,7 @@ export const list = query({
       return searched.filter((l) => !l.isHidden).slice(0, limit);
     }
 
+    const fetchLimit = limit * 2;
     let results;
     if (args.category) {
       results = await ctx.db
@@ -110,7 +111,7 @@ export const list = query({
           q.eq("category", args.category!).eq("status", "active")
         )
         .order("desc")
-        .take(limit);
+        .take(fetchLimit);
     } else if (args.area) {
       results = await ctx.db
         .query("listings")
@@ -118,13 +119,13 @@ export const list = query({
           q.eq("area", args.area!).eq("status", "active")
         )
         .order("desc")
-        .take(limit);
+        .take(fetchLimit);
     } else {
       results = await ctx.db
         .query("listings")
         .withIndex("by_status_created", (q) => q.eq("status", "active"))
         .order("desc")
-        .take(limit);
+        .take(fetchLimit);
     }
 
     const now = Date.now();
@@ -138,7 +139,8 @@ export const list = query({
       if (args.sortBy === "price_asc") return a.price - b.price;
       if (args.sortBy === "price_desc") return b.price - a.price;
       return b.createdAt - a.createdAt;
-    });
+    })
+      .slice(0, limit);
   },
 });
 
