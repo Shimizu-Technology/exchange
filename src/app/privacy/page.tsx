@@ -25,7 +25,7 @@ export default function PrivacyPage() {
 
       <section className="space-y-2">
         <h2 className="font-semibold text-charcoal">Sharing</h2>
-        <p className="text-charcoal/80">We do not sell personal data. We may share limited data with service providers required to run the app (hosting, analytics, authentication, storage).</p>
+        <p className="text-charcoal/80">We do not sell personal data. We may share limited data with service providers required to run the app (hosting, analytics, authentication, payment processing, storage).</p>
       </section>
 
       <section className="space-y-2">

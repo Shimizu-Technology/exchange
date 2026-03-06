@@ -50,6 +50,13 @@ export default function TermsPage() {
           If a payment fails or is disputed/charged back, related paid promotion may be removed or reversed while the dispute is resolved.
         </p>
       </section>
+
+      <section className="space-y-2">
+        <h2 className="font-semibold text-charcoal">6. Governing law</h2>
+        <p className="text-charcoal/80">
+          These Terms are governed by the laws of Guam, U.S.A. Any disputes arising from use of the platform are subject to the exclusive jurisdiction of the courts of Guam.
+        </p>
+      </section>
     </div>
   );
 }
