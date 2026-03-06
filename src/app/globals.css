@@ -1,26 +1,26 @@
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600,700&f[]=zodiak@400,500,600,700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=boska@400,500,700&f[]=cabinet-grotesk@400,500,700&display=swap');
 
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-coral: #e07a5f;
-  --color-coral-light: #f0a18c;
-  --color-coral-dark: #c25a3e;
-  --color-sand: #f4f1de;
-  --color-sand-dark: #e8e4c9;
-  --color-ocean: #3d405b;
-  --color-ocean-light: #5a5d7a;
-  --color-sage: #81b29a;
-  --color-sage-light: #a8d4bc;
-  --color-sage-dark: #5f9178;
-  --color-cream: #fefcf3;
-  --color-charcoal: #2d2d2d;
-  --color-muted: #9c9c9c;
+  --color-coral: #ff3366;
+  --color-coral-light: #ff6699;
+  --color-coral-dark: #cc0044;
+  --color-sand: #161626;
+  --color-sand-dark: #0e0e1c;
+  --color-ocean: #e8e8f0;
+  --color-ocean-light: #f2f2f8;
+  --color-sage: #f0b429;
+  --color-sage-light: #f7cf6d;
+  --color-sage-dark: #c89300;
+  --color-cream: #0b0b16;
+  --color-charcoal: #dcdce5;
+  --color-muted: #6a6a82;
 
-  --font-display: 'Zodiak', serif;
-  --font-body: 'General Sans', sans-serif;
+  --font-display: 'Boska', serif;
+  --font-body: 'Cabinet Grotesk', sans-serif;
 }
 
 body {
@@ -35,27 +35,11 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-muted);
-  border-radius: 3px;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3a3a50; border-radius: 3px; }
 
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
 
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
