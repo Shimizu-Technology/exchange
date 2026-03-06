@@ -37,6 +37,19 @@ export default function TermsPage() {
           Harassment, fraud, impersonation, and prohibited items are not allowed. Accounts or listings may be suspended or removed at our discretion.
         </p>
       </section>
+
+      <section className="space-y-2">
+        <h2 className="font-semibold text-charcoal">5. Payments and transaction terms</h2>
+        <p className="text-charcoal/80">
+          Payment processing for paid listing features is handled by Stripe. ExChange does not store full card details.
+        </p>
+        <p className="text-charcoal/80">
+          Platform fees, if applicable, are shown at checkout before purchase confirmation. Unless required by law, completed paid boosts/listing fees are non-refundable.
+        </p>
+        <p className="text-charcoal/80">
+          If a payment fails or is disputed/charged back, related paid promotion may be removed or reversed while the dispute is resolved.
+        </p>
+      </section>
     </div>
   );
 }

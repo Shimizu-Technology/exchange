@@ -12,7 +12,10 @@ export default function PrivacyPage() {
 
       <section className="space-y-2">
         <h2 className="font-semibold text-charcoal">What we collect</h2>
-        <p className="text-charcoal/80">We collect account profile details, listing content, report submissions, and basic usage analytics needed to operate the marketplace.</p>
+        <p className="text-charcoal/80">
+          We collect account profile details, listing content, report submissions, and usage analytics needed to operate the marketplace.
+          Analytics is processed through PostHog, which may use cookies and/or browser local storage to recognize sessions and product usage patterns.
+        </p>
       </section>
 
       <section className="space-y-2">

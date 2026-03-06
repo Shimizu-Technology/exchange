@@ -18,6 +18,7 @@ export default function ProhibitedItemsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-5">
       <h1 className="font-display text-3xl text-ocean">Prohibited Items</h1>
+      <p className="text-sm text-muted">Last updated: 2026-03-06</p>
       <p className="text-charcoal/80">
         Listings that include prohibited content will be removed and may lead to account suspension.
       </p>
