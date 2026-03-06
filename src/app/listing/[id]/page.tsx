@@ -39,15 +39,9 @@ export default function ListingDetailPage() {
   useEffect(() => {
     if (listing) {
       incrementView({ id: listingId });
-      trackEvent("listing_viewed", {
-        listingId,
-        title: listing.title,
-        category: listing.category,
-        price: listing.price,
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listingId, listing?._id]);
+  }, [listingId]);
 
   const handleIWantThis = useCallback(async () => {
     if (!currentUser) {
@@ -56,8 +50,6 @@ export default function ListingDetailPage() {
       return;
     }
     try {
-      trackEvent("contact_clicked", { listingId, title: listing?.title, price: listing?.price });
-      // keep legacy event for existing dashboards during migration window
       trackEvent("i_want_this_clicked", { listingId, title: listing?.title, price: listing?.price });
       const convId = await getOrCreateConversation({ listingId });
       router.push(`/messages/${convId}`);
@@ -313,11 +305,9 @@ export default function ListingDetailPage() {
                 return;
               }
               const reason = prompt("Why are you reporting this listing?\n\n• Spam or scam\n• Inappropriate content\n• Prohibited item\n• Other");
-              const trimmedReason = reason?.trim();
-              if (!trimmedReason) return;
+              if (!reason) return;
               try {
-                await reportListing({ id: listingId, reason: trimmedReason });
-                trackEvent("listing_reported", { listingId, reason: trimmedReason });
+                await reportListing({ id: listingId, reason });
                 alert("Report submitted. Thank you!");
               } catch (e: any) {
                 alert(e.message?.includes("already reported") ? "You already reported this listing" : "Failed to submit report");
