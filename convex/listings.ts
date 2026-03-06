@@ -1,5 +1,69 @@
 import { v } from "convex/values";
 import { query, mutation, internalMutation } from "./_generated/server";
+import {
+  MARKETPLACE_AREAS,
+  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_CONDITIONS,
+} from "../shared/marketplace-constants";
+
+const ALLOWED_CATEGORIES: Set<string> = new Set(MARKETPLACE_CATEGORIES);
+const ALLOWED_AREAS: Set<string> = new Set(MARKETPLACE_AREAS);
+const ALLOWED_CONDITIONS: Set<string> = new Set(MARKETPLACE_CONDITIONS);
+
+function validateListingInput(args: {
+  title?: string;
+  description?: string;
+  story?: string;
+  price?: number;
+  photos?: string[];
+  category?: string;
+  area?: string;
+  condition?: string;
+}) {
+  if (args.title !== undefined) {
+    const title = args.title.trim();
+    if (title.length < 3 || title.length > 100) {
+      throw new Error("Title must be 3-100 characters");
+    }
+  }
+
+  if (args.description !== undefined) {
+    const desc = args.description.trim();
+    if (desc.length < 5 || desc.length > 1000) {
+      throw new Error("Description must be 5-1000 characters");
+    }
+  }
+
+  if (args.story !== undefined && args.story.trim().length > 2000) {
+    throw new Error("Story must be 2000 characters or less");
+  }
+
+  if (
+    args.price !== undefined &&
+    (!Number.isFinite(args.price) || args.price < 0 || !Number.isInteger(args.price))
+  ) {
+    throw new Error("Price must be a non-negative integer (cents)");
+  }
+
+  if (args.photos !== undefined) {
+    if (args.photos.length > 5) throw new Error("Maximum 5 photos allowed");
+    for (const p of args.photos) {
+      if (!p || p.trim().length === 0) throw new Error("Invalid photo entry");
+    }
+  }
+
+  if (args.category !== undefined && !ALLOWED_CATEGORIES.has(args.category)) {
+    throw new Error("Invalid category");
+  }
+
+  if (args.area !== undefined && !ALLOWED_AREAS.has(args.area)) {
+    throw new Error("Invalid area");
+  }
+
+  if (args.condition !== undefined && !ALLOWED_CONDITIONS.has(args.condition)) {
+    throw new Error("Invalid condition");
+  }
+}
 
 // Helper to get current user from Clerk identity
 async function getCurrentUser(ctx: any) {
@@ -127,6 +191,8 @@ export const create = mutation({
     const user = await getCurrentUser(ctx);
     if (user.isBanned) throw new Error("User is banned");
 
+    validateListingInput(args);
+
     if (!user.isPremium) {
       const activeListings = await ctx.db
         .query("listings")
@@ -142,11 +208,11 @@ export const create = mutation({
     const now = Date.now();
     return await ctx.db.insert("listings", {
       sellerId: user._id,
-      title: args.title,
-      description: args.description,
-      story: args.story,
+      title: args.title.trim(),
+      description: args.description.trim(),
+      story: args.story?.trim() || undefined,
       price: args.price,
-      photos: args.photos,
+      photos: args.photos.map((p) => p.trim()),
       category: args.category,
       area: args.area,
       condition: args.condition,
@@ -179,12 +245,23 @@ export const update = mutation({
     if (!listing) throw new Error("Listing not found");
     if (user._id !== listing.sellerId) throw new Error("Not authorized");
 
+    validateListingInput({
+      title: args.title,
+      description: args.description,
+      story: args.story,
+      price: args.price,
+      photos: args.photos,
+      category: args.category,
+      area: args.area,
+      condition: args.condition,
+    });
+
     const updates: Record<string, unknown> = { updatedAt: Date.now() };
-    if (args.title !== undefined) updates.title = args.title;
-    if (args.description !== undefined) updates.description = args.description;
-    if (args.story !== undefined) updates.story = args.story;
+    if (args.title !== undefined) updates.title = args.title.trim();
+    if (args.description !== undefined) updates.description = args.description.trim();
+    if (args.story !== undefined) updates.story = args.story.trim() || undefined;
     if (args.price !== undefined) updates.price = args.price;
-    if (args.photos !== undefined) updates.photos = args.photos;
+    if (args.photos !== undefined) updates.photos = args.photos.map((p) => p.trim());
     if (args.category !== undefined) updates.category = args.category;
     if (args.area !== undefined) updates.area = args.area;
     if (args.condition !== undefined) updates.condition = args.condition;

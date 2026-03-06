@@ -1,5 +1,10 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import {
+  MARKETPLACE_AREAS,
+  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_CONDITIONS,
+} from "../../shared/marketplace-constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -24,28 +29,8 @@ export function formatTimeAgo(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString();
 }
 
-export const CATEGORIES = [
-  "All",
-  "Jewelry & Watches",
-  "Clothes & Accessories",
-  "Electronics",
-  "Furniture & Home",
-  "Books & Media",
-  "Gifts & Misc",
-  "Stuff They Left Behind",
-] as const;
+export const CATEGORIES = ["All", ...MARKETPLACE_CATEGORIES] as const;
 
-export const AREAS = [
-  "Dededo", "Yigo", "Tamuning", "Tumon", "Hagatna",
-  "Mangilao", "Barrigada", "Chalan Pago", "Sinajana",
-  "Agana Heights", "Mongmong-Toto-Maite", "Asan", "Piti",
-  "Santa Rita", "Agat", "Talofofo", "Inarajan", "Merizo", "Umatac",
-] as const;
+export const AREAS = MARKETPLACE_AREAS;
 
-export const CONDITIONS = [
-  "New",
-  "Like New",
-  "Good",
-  "Fair",
-  "It's Been Through a Lot",
-] as const;
+export const CONDITIONS = MARKETPLACE_CONDITIONS;

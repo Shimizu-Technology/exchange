@@ -37,21 +37,28 @@ export default function SellPage() {
   const [price, setPrice] = useState("");
   const [isFree, setIsFree] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const goToStep = (nextStep: number) => {
+    setSubmitError(null);
+    setStep(nextStep);
+  };
 
   const canProceed = () => {
     switch (step) {
       case 0: return true; // Photos optional for now
-      case 1: return title.trim() && category && area && condition;
+      case 1: return title.trim().length >= 3 && description.trim().length >= 5 && category && area && condition;
       case 2: return true; // Story optional
-      case 3: return isFree || (price && Number(price) > 0);
+      case 3: return isFree || (price && Math.round(Number(price) * 100) > 0);
       case 4: return true;
       default: return false;
     }
   };
 
   const handleSubmit = useCallback(async () => {
+    setSubmitError(null);
     if (!currentUser) {
-      alert("Please sign in to post a listing!");
+      setSubmitError("Please sign in to post a listing.");
       return;
     }
     setSubmitting(true);
@@ -69,7 +76,7 @@ export default function SellPage() {
       trackEvent("listing_created", { listingId, title: title.trim(), category, area, price: isFree ? 0 : Number(price) });
       router.push(`/listing/${listingId}`);
     } catch (e: any) {
-      alert(e.message || "Something went wrong");
+      setSubmitError(e?.message || "Something went wrong. Please retry.");
       setSubmitting(false);
     }
   }, [currentUser, createListing, title, description, story, isFree, price, photos, category, area, condition, router]);
@@ -81,7 +88,7 @@ export default function SellPage() {
         {STEPS.map((s, i) => (
           <div key={s} className="flex items-center flex-1">
             <button
-              onClick={() => i < step && setStep(i)}
+              onClick={() => i < step && goToStep(i)}
               className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
                 i === step ? "text-coral" : i < step ? "text-sage cursor-pointer" : "text-muted/40"
               }`}
@@ -340,7 +347,7 @@ export default function SellPage() {
       <div className="flex items-center gap-3 mt-8">
         {step > 0 && (
           <button
-            onClick={() => setStep(step - 1)}
+            onClick={() => goToStep(step - 1)}
             className="px-5 py-3 rounded-xl border border-charcoal/10 text-muted font-medium hover:text-charcoal hover:border-charcoal/20 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -349,7 +356,7 @@ export default function SellPage() {
 
         {step < STEPS.length - 1 ? (
           <button
-            onClick={() => setStep(step + 1)}
+            onClick={() => goToStep(step + 1)}
             disabled={!canProceed()}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-charcoal text-white rounded-xl font-display font-bold hover:bg-ocean disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
@@ -371,6 +378,12 @@ export default function SellPage() {
           </button>
         )}
       </div>
+
+      {submitError && (
+        <div className="mt-3 rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
+          {submitError}
+        </div>
+      )}
     </div>
   );
 }
