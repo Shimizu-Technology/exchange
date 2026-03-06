@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import "./globals.css";
 import { ConvexProvider } from "@/components/convex-provider";
 import { PostHogProvider } from "@/components/analytics/posthog-provider";
@@ -82,11 +83,11 @@ export default function RootLayout({
             {/* Footer + policy links */}
             <footer className="py-4 text-center border-t border-charcoal/10 mb-20 md:mb-0 space-y-2">
               <div className="text-xs text-muted flex items-center justify-center gap-3">
-                <a href="/terms" className="hover:text-charcoal transition-colors duration-200">Terms</a>
+                <Link href="/terms" className="hover:text-charcoal transition-colors duration-200">Terms</Link>
                 <span>•</span>
-                <a href="/privacy" className="hover:text-charcoal transition-colors duration-200">Privacy</a>
+                <Link href="/privacy" className="hover:text-charcoal transition-colors duration-200">Privacy</Link>
                 <span>•</span>
-                <a href="/prohibited-items" className="hover:text-charcoal transition-colors duration-200">Prohibited items</a>
+                <Link href="/prohibited-items" className="hover:text-charcoal transition-colors duration-200">Prohibited items</Link>
               </div>
               <a
                 href="https://shimizu-technology.com"

@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORIES, AREAS, CONDITIONS, formatPrice } from "@/lib/utils";
@@ -446,7 +447,7 @@ export default function SellPage() {
 
       {step === STEPS.length - 1 && (
         <p className="mt-3 text-xs text-muted">
-          By posting, you agree to our <a href="/terms" className="underline hover:text-charcoal">Terms</a> and acknowledge our <a href="/prohibited-items" className="underline hover:text-charcoal">Prohibited Items</a> policy.
+          By posting, you agree to our <Link href="/terms" className="underline hover:text-charcoal">Terms</Link> and acknowledge our <Link href="/prohibited-items" className="underline hover:text-charcoal">Prohibited Items</Link> policy.
         </p>
       )}
 

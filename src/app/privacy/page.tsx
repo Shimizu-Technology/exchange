@@ -27,7 +27,10 @@ export default function PrivacyPage() {
 
       <section className="space-y-2">
         <h2 className="font-semibold text-charcoal">Your controls</h2>
-        <p className="text-charcoal/80">You can edit or remove your listings, and you can request account removal by contacting support.</p>
+        <p className="text-charcoal/80">
+          You can edit or remove your listings, and you can request account removal by emailing
+          {" "}<a href="mailto:support@exchange-guam.com" className="underline hover:text-charcoal">support@exchange-guam.com</a>.
+        </p>
       </section>
     </div>
   );
