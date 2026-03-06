@@ -121,12 +121,17 @@ export const moderateReport = mutation({
     const report = await ctx.db.get(args.reportId);
     if (!report) throw new Error("Report not found");
 
-    if (args.action === "hide") {
-      await ctx.db.patch(report.listingId, { isHidden: true, updatedAt: Date.now() });
-    }
+    if (args.action === "hide" || args.action === "remove") {
+      const listing = await ctx.db.get(report.listingId);
+      if (!listing) throw new Error("Listing not found");
 
-    if (args.action === "remove") {
-      await ctx.db.patch(report.listingId, { status: "removed", updatedAt: Date.now() });
+      if (args.action === "hide") {
+        await ctx.db.patch(report.listingId, { isHidden: true, updatedAt: Date.now() });
+      }
+
+      if (args.action === "remove") {
+        await ctx.db.patch(report.listingId, { status: "removed", updatedAt: Date.now() });
+      }
     }
 
     await ctx.db.patch(args.reportId, { status: "resolved" });

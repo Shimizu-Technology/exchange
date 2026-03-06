@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import type { Id } from "../../../../convex/_generated/dataModel";
 import { CheckCircle, Clock, EyeOff, Trash2 } from "lucide-react";
 
 export default function AdminReportsPage() {
@@ -13,10 +14,10 @@ export default function AdminReportsPage() {
   const resolved = reports.filter((r: any) => r.status === "resolved");
 
   const handleModerate = async (
-    reportId: string,
+    reportId: Id<"reports">,
     action: "resolve" | "hide" | "remove",
   ) => {
-    await moderateReport({ reportId: reportId as any, action });
+    await moderateReport({ reportId, action });
   };
 
   return (
@@ -60,14 +61,20 @@ export default function AdminReportsPage() {
                     </button>
                     <button
                       onClick={() => handleModerate(report._id, "hide")}
-                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium"
+                      disabled={!report.listing}
+                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <EyeOff className="w-4 h-4" />
                       Hide listing
                     </button>
                     <button
-                      onClick={() => handleModerate(report._id, "remove")}
-                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-coral/10 text-coral hover:bg-coral/20 transition-colors font-medium"
+                      onClick={() => {
+                        if (window.confirm("Permanently remove this listing?")) {
+                          void handleModerate(report._id, "remove");
+                        }
+                      }}
+                      disabled={!report.listing}
+                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-coral/10 text-coral hover:bg-coral/20 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Trash2 className="w-4 h-4" />
                       Remove listing
