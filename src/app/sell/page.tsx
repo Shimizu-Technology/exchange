@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORIES, AREAS, CONDITIONS, formatPrice } from "@/lib/utils";
@@ -443,6 +444,12 @@ export default function SellPage() {
           </button>
         )}
       </div>
+
+      {step === STEPS.length - 1 && (
+        <p className="mt-3 text-xs text-muted">
+          By posting, you agree to our <Link href="/terms" className="underline hover:text-charcoal">Terms</Link> and acknowledge our <Link href="/prohibited-items" className="underline hover:text-charcoal">Prohibited Items</Link> policy.
+        </p>
+      )}
 
       {submitError && (
         <div className="mt-3 rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
