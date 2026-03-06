@@ -101,10 +101,16 @@ Owner: Leon / Shimizu Technology
 - [ ] Sell flow usable with image upload
 - [ ] Contact action usable
 
+### Admin moderation (both iOS Safari + Android Chrome)
+- [ ] `/admin/reports` loads
+- [ ] Resolve / Hide / Remove moderation actions are usable
+
 ---
 
 ## UAT Sign-off
 - Date:
 - Tested by:
+- Environment URL:
+- Build / Commit SHA:
 - Result: PASS / PASS WITH NOTES / FAIL
 - Notes:

@@ -16,6 +16,7 @@ Launch only if all are true:
 - [ ] Moderation queue actions verified (resolve/hide/remove)
 - [ ] Policy pages are live and linked
 - [ ] Production env vars verified (Clerk, Convex, Stripe, analytics)
+- [ ] Admin/moderation on-call contact is assigned and confirmed available
 
 If any P0 blocker exists -> **No-Go** and patch first.
 
@@ -59,6 +60,8 @@ Priority watchlist:
 - payment checkout errors
 
 Operational thresholds (initial):
+- auth/session errors affecting >1 user in 15 minutes -> investigate Clerk env vars/domain/session config immediately
+- upload failure rate >10% in 30 minutes -> investigate storage provider health and pause image-heavy onboarding guidance
 - >5% listing publish failure in 1 hour -> investigate immediately
 - repeated moderation action failures -> pause new invites until resolved
 - payment checkout failures affecting multiple users -> temporarily disable paid boosts and announce fallback
@@ -73,7 +76,8 @@ Operational thresholds (initial):
 - Increase moderation cadence if report volume spikes
 
 ### Full rollback (if critical)
-- Revert to last known stable production deployment
+- If deployed via Vercel/Netlify dashboard: Deployments -> select last known stable commit -> Redeploy
+- If rollback via git: `git checkout main && git revert <bad_sha> && git push` to trigger CI/CD redeploy
 - Post short incident notice in pilot channel
 - Resume after hotfix verification
 
