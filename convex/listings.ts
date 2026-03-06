@@ -98,7 +98,8 @@ export const list = query({
           if (args.area) sq = sq.eq("area", args.area);
           return sq;
         });
-      return await searchQuery.take(limit);
+      const searched = await searchQuery.take(limit * 2);
+      return searched.filter((l) => !l.isHidden).slice(0, limit);
     }
 
     let results;
@@ -127,7 +128,9 @@ export const list = query({
     }
 
     const now = Date.now();
-    return results.sort((a, b) => {
+    return results
+      .filter((l) => !l.isHidden)
+      .sort((a, b) => {
       const aFeatured = a.featured && a.featuredUntil && a.featuredUntil > now;
       const bFeatured = b.featured && b.featuredUntil && b.featuredUntil > now;
       if (aFeatured && !bFeatured) return -1;

@@ -11,26 +11,36 @@ export default function AdminReportsPage() {
   const reports = reportsData ?? [];
   const moderateReport = useMutation(api.admin.moderateReport);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [loadingReportId, setLoadingReportId] = useState<Id<"reports"> | null>(null);
 
-  const pending = reports.filter((r: any) => r.status === "pending");
-  const resolved = reports.filter((r: any) => r.status === "resolved");
+  const pending = reports.filter((r) => r.status === "pending");
+  const resolved = reports.filter((r) => r.status === "resolved");
 
   const handleModerate = async (
     reportId: Id<"reports">,
     action: "resolve" | "hide" | "remove",
   ) => {
     setActionError(null);
+    setLoadingReportId(reportId);
     try {
       await moderateReport({ reportId, action });
     } catch (err) {
       console.error("Moderation action failed", err);
       setActionError("Action failed. Please try again.");
+    } finally {
+      setLoadingReportId(null);
     }
   };
 
   return (
     <div>
       <h1 className="font-display text-3xl text-ocean mb-6">Reports</h1>
+
+      {actionError && (
+        <div className="mb-4 rounded-lg border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
+          {actionError}
+        </div>
+      )}
 
       {pending.length > 0 && (
         <div className="mb-8">
@@ -39,7 +49,9 @@ export default function AdminReportsPage() {
             Pending ({pending.length})
           </h2>
           <div className="space-y-3">
-            {pending.map((report) => (
+            {pending.map((report) => {
+              const isReportLoading = loadingReportId === report._id;
+              return (
               <div key={report._id} className="bg-white rounded-xl p-5 border border-charcoal/5 shadow-sm">
                 <div className="space-y-3">
                   <div>
@@ -62,14 +74,15 @@ export default function AdminReportsPage() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => void handleModerate(report._id, "resolve")}
-                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-sage/10 text-sage hover:bg-sage/20 transition-colors font-medium"
+                      disabled={isReportLoading}
+                      className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-sage/10 text-sage hover:bg-sage/20 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <CheckCircle className="w-4 h-4" />
-                      Resolve
+                      {isReportLoading ? "Working..." : "Resolve"}
                     </button>
                     <button
                       onClick={() => void handleModerate(report._id, "hide")}
-                      disabled={!report.listing}
+                      disabled={!report.listing || isReportLoading}
                       className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <EyeOff className="w-4 h-4" />
@@ -81,7 +94,7 @@ export default function AdminReportsPage() {
                           void handleModerate(report._id, "remove");
                         }
                       }}
-                      disabled={!report.listing}
+                      disabled={!report.listing || isReportLoading}
                       className="flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg bg-coral/10 text-coral hover:bg-coral/20 transition-colors font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -90,14 +103,9 @@ export default function AdminReportsPage() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-      )}
-
-      {actionError && (
-        <div className="mb-4 rounded-lg border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
-          {actionError}
         </div>
       )}
 
