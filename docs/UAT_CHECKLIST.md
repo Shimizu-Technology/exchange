@@ -62,6 +62,7 @@ Owner: Leon / Shimizu Technology
 
 ## F) Moderation / Admin
 
+- [ ] Non-admin user attempting `/admin/reports` is redirected or shown unauthorized state
 - [ ] Admin reports page loads pending + resolved queues
 - [ ] Report cards show reporter + listing context
 - [ ] Resolve action works and marks report resolved

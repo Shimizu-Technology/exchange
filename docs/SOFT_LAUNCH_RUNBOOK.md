@@ -77,7 +77,7 @@ Operational thresholds (initial):
 
 ### Full rollback (if critical)
 - If deployed via Vercel/Netlify dashboard: Deployments -> select last known stable commit -> Redeploy
-- If rollback via git: `git checkout main && git revert <bad_sha> && git push` to trigger CI/CD redeploy
+- If rollback via git: `git checkout main && git pull && git revert <bad_sha> && git push` to trigger CI/CD redeploy
 
 ### Convex backend rollback
 - Convex dashboard -> Deployments -> identify last known stable deployment -> redeploy, OR
@@ -99,7 +99,7 @@ Per issue capture:
 - Expected vs actual
 - Severity (P0/P1/P2)
 
-Store consolidated notes in launch log.
+Store consolidated notes in launch log: `docs/launch-logs/<YYYY-MM-DD>-pilot.md`.
 
 ---
 
