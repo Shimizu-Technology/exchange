@@ -42,7 +42,7 @@ export default function SellPage() {
   const canProceed = () => {
     switch (step) {
       case 0: return true; // Photos optional for now
-      case 1: return title.trim() && category && area && condition;
+      case 1: return title.trim().length >= 3 && description.trim().length >= 5 && category && area && condition;
       case 2: return true; // Story optional
       case 3: return isFree || (price && Number(price) > 0);
       case 4: return true;
