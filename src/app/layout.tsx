@@ -79,8 +79,15 @@ export default function RootLayout({
             <main className="pb-20 md:pb-0">
               {children}
             </main>
-            {/* Shimizu Technology attribution */}
-            <footer className="py-4 text-center border-t border-charcoal/10 mb-20 md:mb-0">
+            {/* Footer + policy links */}
+            <footer className="py-4 text-center border-t border-charcoal/10 mb-20 md:mb-0 space-y-2">
+              <div className="text-xs text-muted flex items-center justify-center gap-3">
+                <a href="/terms" className="hover:text-charcoal transition-colors duration-200">Terms</a>
+                <span>•</span>
+                <a href="/privacy" className="hover:text-charcoal transition-colors duration-200">Privacy</a>
+                <span>•</span>
+                <a href="/prohibited-items" className="hover:text-charcoal transition-colors duration-200">Prohibited items</a>
+              </div>
               <a
                 href="https://shimizu-technology.com"
                 target="_blank"
