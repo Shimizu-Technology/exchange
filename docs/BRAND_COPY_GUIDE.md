@@ -19,12 +19,7 @@ Last updated: 2026-03-06
 - Your ex's trash, your treasure.
 
 ## Rotation set (live UI)
-- He bought it. You profit.
-- Breakup? Make it bank-up.
-- From ex to extra cash.
-- Moving on, making money.
-- Eff that. Buy it.
-- Your ex's trash, your treasure.
+- Uses the full Auntie Daena-approved tagline pool above.
 
 ## Usage
 - Use one primary tagline in key hero areas
