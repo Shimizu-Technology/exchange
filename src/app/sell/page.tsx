@@ -19,7 +19,7 @@ const STEPS = ["Photos", "Details", "Story", "Price", "Preview"];
 const storyPrompts = [
   "What's the story behind this item?",
   "From ex to extra cash — what's the context?",
-  "Breakup? Make it bank-up. Give buyers the backstory.",
+  "Your ex's trash, your treasure. Give buyers the backstory.",
   "We're all ears. Let it out.",
 ];
 

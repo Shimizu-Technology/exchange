@@ -14,6 +14,8 @@ const TAGLINES = [
   "Breakup? Make it bank-up.",
   "From ex to extra cash.",
   "Moving on, making money.",
+  "Eff that. Buy it.",
+  "Your ex's trash, your treasure.",
 ] as const;
 
 const fadeUp: Variants = {
@@ -150,7 +152,7 @@ export default function HomePage() {
       ) : rest.length === 0 && featured.length === 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
           <HeartCrack className="w-12 h-12 text-coral/15 mx-auto mb-4" />
-          <p className="text-muted text-sm italic">No listings yet. Be the first to turn heartbreak into extra cash.</p>
+          <p className="text-muted text-sm italic">No listings yet. Your ex's trash, your treasure — be the first to list.</p>
         </motion.div>
       ) : (
         <motion.div
